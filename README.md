@@ -1,81 +1,57 @@
-# Visual Studio Local LLM Plugin - With Ollama - Extra Tool
+# Visual Studio AI Assistant (Local LLM Plugin Modern)
 
-## Project Objective: 
-To get help from Local AI quickly on Visual Studio. Thanks to Local LLM, to ensure project security and prevent code leaks. At the same time, to make a tool that provides convenience in terms of certain functions.
+A powerful, modern, and highly optimized AI assistant extension for **Visual Studio**. Seamlessly integrate local LLMs (Ollama) and cloud-based AI models (OpenAI, Anthropic, Gemini) directly into your coding environment. 
 
-## How does it work?
+Built with **Clean Architecture**, **MVVM**, and **Dependency Injection**, this plugin offers a lightning-fast, native-feeling dark theme experience that boosts your productivity without leaving your IDE.
 
-While working on Visual Studio. you can use the tools you want by opening the tool with the key combination you will assign. You can get help from artificial intelligence by writing a message. You can send the codes you choose to the artificial intelligence with a single button and have it work on those codes. 
+## Features
 
-## Assignment Process:
-Visual Studio - Tools - Keyboard - Whow Commands Containing LocalLLLMPlug
+* **Multi-Provider AI Support:** Switch seamlessly between **Ollama (Local)**, **OpenAI (ChatGPT)**, **Anthropic (Claude)**, and **Google Gemini**.
+* **Smart Defaults:** Automatically configures API URLs and model names based on the selected provider.
+* **Modern WPF Dark Theme:** A sleek, eye-friendly interface that perfectly matches Visual Studio's native dark mode.
+* **Lightning Fast Text Application:** Utilizes Visual Studio's `UndoContext` to instantly apply massive code blocks without freezing the editor, allowing single-step Undo (`Ctrl+Z`).
+* **Partial Selection Injection:** Select a specific part of the AI's response to inject only that portion into your code, ignoring unnecessary conversational text.
+* **Advanced Text Manipulation Tools:**
+    * ` Remove Duplicates`: Instantly cleans up duplicate lines in your selection.
+    * ` Modify & Replicate`: Find a target word and duplicate the line for multiple new variables in one click.
+    * ` Erase`: Quickly strip specific words or characters from a massive text block.
+    * ` Add`: Prepend or append specific text to every selected line.
 
-## Supported Servers.
-OLLAMA
+## Keyboard Shortcuts (Power User Friendly)
 
-## Ollama Install
+The UI is entirely optimized for keyboard-only navigation:
+* **`Ctrl + 1`**: Open the AI Assistant (Global VS Shortcut).
+* **`Enter`**: Send your prompt to the AI.
+* **`Shift + Enter`**: Apply the AI's response directly to your code editor and close the window.
+* **`Ctrl + Enter`**: Add a new line within the prompt input box.
+* **`Esc`**: Cancel and close the assistant.
 
-Download: https://ollama.com/download
-Model: https://ollama.com/search
+## Installation
 
-After installing and running the Ollama server, you can download and run the model you want. Then you can select and save your server settings and model from the Plugin settings section. 
+1. Download the latest `.vsix` release from the [Releases](../../releases) page.
+2. Double-click the downloaded file to open the VSIX Installer.
+3. Select **Visual Studio** and click Install.
+4. Restart Visual Studio. 
+5. You can find the tool under the **Tools -> Local LLM Plugin (Modern)** menu, or simply press `Ctrl + 1`.
 
-ollama run deepseek-r1:1.5b
+## Architecture & Technologies
 
-## Supported Models:
-deeepseek-r1
-llama3.3
-phi4
-nomic-embed-text
-mistral
-qwen
-gemma
-llava
-qwen2.5-code
-mxbai-embed-large
-starcoder2
+This extension was rebuilt from scratch to meet Enterprise standards:
+* **Framework:** .NET Framework 4.7.2 / WPF
+* **Architecture:** Clean Architecture & MVVM (Model-View-ViewModel)
+* **Patterns:** Dependency Injection (Microsoft.Extensions.DependencyInjection), Factory Pattern (for AI providers)
+* **Performance:** `StringBuilder` and `StringReader` for handling large text blocks without memory leaks.
 
-## Extra Features:
+## Configuration
 
-### Remove Duplicate: 
+1. Open the plugin (`Ctrl + 1`).
+2. Click the **⚙️ Settings** button on the top toolbar.
+3. Select your preferred **AI Provider**.
+4. Enter your API Key (Securely stored as a `PasswordBox`). URLs and Model names will be auto-filled, but you can override them.
+5. Click **Save Settings**.
 
-It removes all duplicate lines in the code section you have selected and quickly edits your code.
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-### Modify & Replicate:
-
-It reproduces your code by selecting a specific code and replacing the words you will write in the prompt section with the word you have selected.
-
-For example:
-
-Selected Text
-
-Console.WriteLine(‘Hello’);
-
-Prompt:
-
-Dobis
-
-Hedwis
-
-Arpis
-
-Word: Hello
-
-Conclusion:
-
-Console.WriteLine(‘Dobis’);
-
-Console.WriteLine(‘Hedwis’);
-
-Console.WriteLine(‘Arpis’);
-
-
-## Erase
-
-It edits the word or sentence you will write by deleting it from the front or back of the code block you have selected.
-
-## Add
-
-It edits the word or sentence you will write by adding it from the front or back of the code block you have selected.
-
-
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

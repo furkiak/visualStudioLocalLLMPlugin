@@ -1,0 +1,99 @@
+﻿<Window x:Class="LLLMPluginModern.UI.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AI Assistant - Local LLM Plugin" Height="850" Width="1000"
+        WindowStartupLocation="CenterScreen" Background="#1E1E1E" Foreground="#E0E0E0"
+        Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#252526"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="BorderBrush" Value="#3F3F46"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <Style x:Key="ToolBarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3F3F46"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#2D2D30" BorderBrush="#3F3F46" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                <Button Content="✨ Remove Duplicates" Command="{Binding RemoveDuplicatesCommand}" Style="{StaticResource ToolBarButtonStyle}"/>
+                <Button Content="🔄 Modify &amp; Replicate" Command="{Binding ModifyReplicateCommand}" Style="{StaticResource ToolBarButtonStyle}"/>
+                <Button Content="🧹 Erase" Command="{Binding EraseCommand}" Style="{StaticResource ToolBarButtonStyle}"/>
+                <Button Content="➕ Add" Command="{Binding AddCommand}" Style="{StaticResource ToolBarButtonStyle}"/>
+
+                <Separator Margin="10,0" Background="#3F3F46"/>
+
+                <Button Content="⚙️ Settings" Command="{Binding SettingsCommand}" Style="{StaticResource ToolBarButtonStyle}"/>
+                <Button Content="ℹ️ Credit" Command="{Binding CreditCommand}" Style="{StaticResource ToolBarButtonStyle}"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="15,15,15,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Selected Code:" Foreground="#4DAAFB" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox Grid.Row="1" Text="{Binding SelectedText}"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="15,5,15,15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="AI Response:" Foreground="#4DAAFB" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox Grid.Row="1" x:Name="txtResponse" Text="{Binding ResponseText}" IsReadOnly="True" Background="#1E1E1E" BorderBrush="#007ACC" BorderThickness="1"/>
+        </Grid>
+
+        <Border Grid.Row="3" Background="#2D2D30" Padding="15" BorderBrush="#3F3F46" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" x:Name="txtPrompt" Text="{Binding PromptText, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="80" Margin="0,0,15,0" 
+                         ToolTip="Göndermek için Enter, Alt satır için Ctrl+Enter"/>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <Button Content="Send AI (Enter)" Command="{Binding SendAiCommand}" 
+                            Background="#007ACC" Foreground="White" FontWeight="Bold" FontSize="14" 
+                            Height="40" Width="180" Margin="0,0,0,10" Cursor="Hand" BorderThickness="0"/>
+                    <Button Content="Apply to Editor (Shift+Enter)" Command="{Binding ApplyCommand}" 
+                            Background="#28A745" Foreground="White" FontWeight="Bold" FontSize="12" 
+                            Height="30" Width="180" Cursor="Hand" BorderThickness="0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

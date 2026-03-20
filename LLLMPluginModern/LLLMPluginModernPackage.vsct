@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+
+	<Commands package="guidLLLMPluginModernPackage">
+		<Groups>
+			<Group guid="guidLLLMPluginModernPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+			</Group>
+		</Groups>
+
+		<Buttons>
+			<Button guid="guidLLLMPluginModernPackageCmdSet" id="Command1Id" priority="0x0100" type="Button">
+				<Parent guid="guidLLLMPluginModernPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Local LLM Plugin (Modern)</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+
+		<Bitmaps>
+			<Bitmap guid="guidImages" href="Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+		</Bitmaps>
+	</Commands>
+	<KeyBindings>
+		<KeyBinding guid="guidLLLMPluginModernPackageCmdSet" id="Command1Id" editor="guidVSStd97" key1="1" mod1="Control" />
+	</KeyBindings>
+	<Symbols>
+		<GuidSymbol name="guidLLLMPluginModernPackage" value="{769e069e-24ac-44f5-ab7c-6983dcc1e77a}" />
+
+		<GuidSymbol name="guidLLLMPluginModernPackageCmdSet" value="{B51F9B79-13A2-4FA8-88D1-9BCCF6DE418D}">
+			<IDSymbol name="MyMenuGroup" value="0x1020" />
+			<IDSymbol name="Command1Id" value="0x0100" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidImages" value="{27d34a9c-1695-41a1-8c10-3b9dcf3ea47d}" >
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
