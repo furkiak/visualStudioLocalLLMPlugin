@@ -1,4 +1,21 @@
+<div align="center">
+
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
+![.NET Framework](https://img.shields.io/badge/.NET_4.7.2-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
+![Visual Studio 2022](https://img.shields.io/badge/Visual_Studio_2022-5C2D91?style=for-the-badge&logo=visual-studio&logoColor=white)
+![WPF](https://img.shields.io/badge/WPF-157EFB?style=for-the-badge&logo=windows&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+
+</div>
+
 # Visual Studio AI Assistant (Local LLM Plugin Modern)
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/furkiak/visualStudioLocalLLMPlugin/refs/heads/master/SSL.png" width="600" title="ActiveRest Dashboard">
+</p>
+
 
 A powerful, modern, and highly optimized AI assistant extension for **Visual Studio**. Seamlessly integrate local LLMs (Ollama) and cloud-based AI models (OpenAI, Anthropic, Gemini) directly into your coding environment. 
 
@@ -52,6 +69,3 @@ This extension was rebuilt from scratch to meet Enterprise standards:
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
