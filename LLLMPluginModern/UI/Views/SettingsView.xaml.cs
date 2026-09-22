@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using LLLMPluginModern.UI.ViewModels;
 
 namespace LLLMPluginModern.UI.Views
@@ -11,6 +11,11 @@ namespace LLLMPluginModern.UI.Views
             DataContext = viewModel;
 
             txtApiKey.Password = viewModel.ApiKey;
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(viewModel.ApiKey) && txtApiKey.Password != viewModel.ApiKey)
+                    txtApiKey.Password = viewModel.ApiKey ?? "";
+            };
 
             viewModel.CloseAction = () => this.Close();
         }

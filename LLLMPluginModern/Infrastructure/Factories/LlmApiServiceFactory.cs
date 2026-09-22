@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using LLLMPluginModern.Core.Interfaces;
 using LLLMPluginModern.Infrastructure.Services;
 
@@ -34,7 +34,8 @@ namespace LLLMPluginModern.Infrastructure.Factories
             if (string.Equals(providerName, "Anthropic", StringComparison.OrdinalIgnoreCase))
                 return _anthropicService;
 
-            return _ollamaService; 
+            if (string.Equals(providerName, "Ollama", StringComparison.OrdinalIgnoreCase)) return _ollamaService;
+            throw new ArgumentException("Unknown provider.", nameof(providerName));
         }
     }
 }

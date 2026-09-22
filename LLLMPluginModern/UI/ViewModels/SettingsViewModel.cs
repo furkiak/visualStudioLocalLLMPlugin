@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using LLLMPluginModern.Core.Interfaces;
@@ -10,6 +10,8 @@ namespace LLLMPluginModern.UI.ViewModels
     {
         private readonly ISettingsService _settingsService;
         private bool _isInitializing = true;
+        private string _errorText;
+        public string ErrorText { get => _errorText; private set => SetProperty(ref _errorText, value); }
 
         public Action CloseAction { get; set; }
 
@@ -24,6 +26,7 @@ namespace LLLMPluginModern.UI.ViewModels
                 if (SetProperty(ref _aiServer, value))
                 {
                     ApplyDefaultSettingsForProvider(value);
+                    if (!_isInitializing) ApiKey = "";
                 }
             }
         }
@@ -47,7 +50,13 @@ namespace LLLMPluginModern.UI.ViewModels
         public SettingsViewModel(ISettingsService settingsService)
         {
             _settingsService = settingsService;
-            var currentSettings = _settingsService.GetSettings();
+            LlmSettings currentSettings;
+            try { currentSettings = _settingsService.GetSettings(); }
+            catch (Exception)
+            {
+                currentSettings = new LlmSettings();
+                ErrorText = "Saved settings could not be read or unlocked. Re-enter your values; Save replaces the existing file. Cancel leaves it untouched.";
+            }
 
             AiServer = string.IsNullOrWhiteSpace(currentSettings.AiServer) ? "Ollama" : currentSettings.AiServer;
             Url = currentSettings.Url;
@@ -76,17 +85,17 @@ namespace LLLMPluginModern.UI.ViewModels
                     break;
                 case "OpenAI":
                     Url = "https://api.openai.com/v1/chat/completions";
-                    Model = "gpt-4o";
+                    Model = "";
                     IsUrlVisible = true;  
                     break;
                 case "Anthropic":
                     Url = "https://api.anthropic.com/v1/messages";
-                    Model = "claude-3-opus-20240229";
+                    Model = "";
                     IsUrlVisible = true;  
                     break;
                 case "Gemini":
                     Url = "";
-                    Model = "gemini-1.5-pro";
+                    Model = "";
                     IsUrlVisible = false;  
                     break;
             }
@@ -95,8 +104,14 @@ namespace LLLMPluginModern.UI.ViewModels
         private void SaveSettings()
         {
             var newSettings = new LlmSettings { AiServer = this.AiServer, Url = this.Url, Model = this.Model, ApiKey = this.ApiKey };
-            _settingsService.SaveSettings(newSettings);
-            CloseAction?.Invoke();
+            try
+            {
+                Infrastructure.Services.HttpLlmApiService.Endpoint(newSettings);
+                if (string.IsNullOrWhiteSpace(newSettings.Model)) { ErrorText = "Enter an available model identifier for this provider."; return; }
+                _settingsService.SaveSettings(newSettings);
+                CloseAction?.Invoke();
+            }
+            catch (Exception) { ErrorText = "Could not save settings. Check the model, endpoint and file permissions. Use HTTPS remotely and keep credentials out of URLs."; }
         }
     }
 }

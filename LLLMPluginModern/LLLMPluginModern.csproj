@@ -53,6 +53,10 @@
 
 	<ItemGroup>
 		<Compile Include="Command1.cs" />
+        <Compile Include="Core\Models\SelectionChange.cs" />
+        <Compile Include="Infrastructure\Services\HttpLlmApiService.cs" />
+        <Compile Include="Infrastructure\Services\ResponseStream.cs" />
+        <Compile Include="UI\ViewModels\AsyncCommand.cs" />
 		<Compile Include="Core\Bootstrapper.cs" />
 		<Compile Include="Core\Interfaces\IDialogService.cs" />
 		<Compile Include="Core\Interfaces\ILlmApiService.cs" />
@@ -104,6 +108,7 @@
 		<Reference Include="PresentationCore" />
 		<Reference Include="PresentationFramework" />
 		<Reference Include="System" />
+		<Reference Include="System.Security" />
 		<Reference Include="System.Data" />
 		<Reference Include="System.Design" />
 		<Reference Include="System.Drawing" />
@@ -119,6 +124,7 @@
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.VisualStudio.SDK.Analyzers" Version="17.7.22" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.10.2179" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
@@ -159,6 +165,10 @@
 
 	<ItemGroup>
 		<Content Include="Resources\Command1.png" />
+        <Content Include="..\LICENSE.txt">
+            <Link>LICENSE.txt</Link>
+            <IncludeInVSIX>true</IncludeInVSIX>
+        </Content>
 	</ItemGroup>
 
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

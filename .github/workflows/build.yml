@@ -1,0 +1,29 @@
+name: Build and test VSIX
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Test production source on .NET Framework
+        run: dotnet test LLLMPluginModern.Tests/LLLMPluginModern.Tests.csproj -c Release --logger "trx;LogFileName=tests.trx" --results-directory artifacts/tests
+      - name: Build VSIX without installing it
+        run: msbuild LLLMPluginModern/LLLMPluginModern.csproj /restore /t:Rebuild /p:Configuration=Release /p:DeployExtension=false /v:minimal
+      - name: Record package checksum
+        shell: pwsh
+        run: Get-FileHash LLLMPluginModern/bin/Release/LLLMPluginModern.vsix -Algorithm SHA256 | Format-List | Out-File artifacts/SHA256.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vsix-and-test-results
+          path: |
+            LLLMPluginModern/bin/Release/*.vsix
+            artifacts/

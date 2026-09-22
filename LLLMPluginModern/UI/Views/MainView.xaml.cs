@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Input;
 using LLLMPluginModern.UI.ViewModels;
 
@@ -11,20 +11,12 @@ namespace LLLMPluginModern.UI.Views
             InitializeComponent();
             DataContext = viewModel;
 
-            viewModel.CloseAction = (isOk) =>
+            viewModel.CloseAction = isOk =>
             {
-                if (isOk) 
-                {
-                  
-                    if (!string.IsNullOrEmpty(txtResponse.SelectedText))
-                    {
-                        viewModel.ResponseText = txtResponse.SelectedText;
-                    }
-                }
-
-                this.DialogResult = isOk;
-                this.Close();
+                if (isOk && !viewModel.CanApply) return;
+                DialogResult = isOk;
             };
+            Closed += (sender, args) => viewModel.OnClosed();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -42,7 +34,7 @@ namespace LLLMPluginModern.UI.Views
                 if (vm.CancelCommand.CanExecute(null)) vm.CancelCommand.Execute(null);
                 e.Handled = true;
             }
-            else if (e.Key == Key.Enter)
+            else if (e.Key == Key.Enter && txtPrompt.IsKeyboardFocusWithin)
             {
                 if (Keyboard.Modifiers == ModifierKeys.Shift)
                 {

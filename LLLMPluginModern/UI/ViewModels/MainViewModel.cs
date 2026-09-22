@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LLLMPluginModern.Core.Interfaces;
+using LLLMPluginModern.Core.Models;
+using LLLMPluginModern.Infrastructure.Services;
 
 namespace LLLMPluginModern.UI.ViewModels
 {
@@ -13,20 +16,29 @@ namespace LLLMPluginModern.UI.ViewModels
         private readonly ILlmApiServiceFactory _apiFactory;
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
-
-        private string _selectedText;
-        public string SelectedText { get => _selectedText; set => SetProperty(ref _selectedText, value); }
-
-        private string _promptText;
-        public string PromptText { get => _promptText; set => SetProperty(ref _promptText, value); }
-
-        private string _responseText;
-        public string ResponseText { get => _responseText; set => SetProperty(ref _responseText, value); }
-
-        private bool _isBusy;
-        public bool IsBusy { get => _isBusy; set => SetProperty(ref _isBusy, value); }
-
- 
+        private CancellationTokenSource request;
+        private LlmSettings preparedSettings;
+        private bool hasCandidate, closed;
+        private string _selectedText = "", _promptText = "", _responseText = "", _statusText = "", _requestSummary = "";
+        private bool _isBusy, _reviewed;
+        public string SelectedText { get => _selectedText; set { if (SetProperty(ref _selectedText, value)) { InvalidateCandidate(); UpdateSummary(); } } }
+        public string PromptText { get => _promptText; set { SetProperty(ref _promptText, value); UpdateSummary(); } }
+        public string ResponseText { get => _responseText; private set { SetProperty(ref _responseText, value); OnPropertyChanged(nameof(DiffText)); } }
+        public string StatusText { get => _statusText; private set => SetProperty(ref _statusText, value); }
+        public string RequestSummary { get => _requestSummary; private set => SetProperty(ref _requestSummary, value); }
+        public bool IsBusy { get => _isBusy; private set { SetProperty(ref _isBusy, value); CommandManager.InvalidateRequerySuggested(); } }
+        public bool Reviewed { get => _reviewed; set { SetProperty(ref _reviewed, value); CommandManager.InvalidateRequerySuggested(); } }
+        public string DiffText => Core.Models.SelectionChange.Preview(SelectedText, ResponseText);
+        public Func<bool> IsTargetCurrent { get; set; }
+        public bool CanApply
+        {
+            get
+            {
+                if (closed || IsBusy || !hasCandidate || !Reviewed || string.IsNullOrWhiteSpace(ResponseText)) return false;
+                try { return IsTargetCurrent != null && IsTargetCurrent(); }
+                catch (Exception) { return false; }
+            }
+        }
         public ICommand SendAiCommand { get; }
         public ICommand RemoveDuplicatesCommand { get; }
         public ICommand ModifyReplicateCommand { get; }
@@ -36,43 +48,97 @@ namespace LLLMPluginModern.UI.ViewModels
         public ICommand CreditCommand { get; }
         public ICommand ApplyCommand { get; }
         public ICommand CancelCommand { get; }
-        public Action<bool> CloseAction { get; set; } 
+        public Action<bool> CloseAction { get; set; }
+
         public MainViewModel(ILlmApiServiceFactory apiFactory, ISettingsService settingsService, IDialogService dialogService)
         {
             _apiFactory = apiFactory;
             _settingsService = settingsService;
             _dialogService = dialogService;
-
-            SendAiCommand = new RelayCommand(async _ => await SendToAiAsync(), _ => !IsBusy);
-            RemoveDuplicatesCommand = new RelayCommand(_ => RemoveDuplicates());
-            SettingsCommand = new RelayCommand(_ => _dialogService.ShowSettings());
-            CreditCommand = new RelayCommand(_ => _dialogService.ShowMessage("Visual Studio Local LLM Plugin\nModernized Version 3.0\n\n  Furkan Akça - Spaceandtab Company", "Credit"));
-
-            ModifyReplicateCommand = new RelayCommand(_ => ModifyAndReplicate());
-            EraseCommand = new RelayCommand(_ => EraseText());
-            AddCommand = new RelayCommand(_ => AddText());
-            ApplyCommand = new RelayCommand(_ => CloseAction?.Invoke(true));  
-            CancelCommand = new RelayCommand(_ => CloseAction?.Invoke(false)); 
-
+            SendAiCommand = new AsyncCommand(SendToAiAsync, () => !closed && !IsBusy && preparedSettings != null &&
+                !(string.IsNullOrWhiteSpace(PromptText) && string.IsNullOrWhiteSpace(SelectedText)),
+                () => { InvalidateCandidate(); StatusText = "The operation failed. Nothing can be applied; check Settings and retry."; });
+            RemoveDuplicatesCommand = new RelayCommand(_ => RemoveDuplicates(), _ => !IsBusy && !closed);
+            ModifyReplicateCommand = new RelayCommand(_ => ModifyAndReplicate(), _ => !IsBusy && !closed);
+            EraseCommand = new RelayCommand(_ => EraseText(), _ => !IsBusy && !closed);
+            AddCommand = new RelayCommand(_ => AddText(), _ => !IsBusy && !closed);
+            SettingsCommand = new RelayCommand(_ => { _dialogService.ShowSettings(); RefreshSettings(); }, _ => !IsBusy);
+            CreditCommand = new RelayCommand(_ => _dialogService.ShowMessage("Local LLM tools for Visual Studio\nFurkan Akça · Space & Tab\nPersonal project label · AGPL-3.0", "About"));
+            ApplyCommand = new RelayCommand(_ => CloseAction?.Invoke(true), _ => CanApply);
+            CancelCommand = new RelayCommand(_ => { if (IsBusy) CancelRequest(); else CloseAction?.Invoke(false); });
+            RefreshSettings();
         }
-
-        private async Task SendToAiAsync()
+        public void RefreshSettings()
         {
-            if (string.IsNullOrWhiteSpace(PromptText) && string.IsNullOrWhiteSpace(SelectedText)) return;
-
+            try
+            {
+                preparedSettings = _settingsService.GetSettings();
+                HttpLlmApiService.Endpoint(preparedSettings);
+                StatusText = "Review the destination and selection before sending.";
+            }
+            catch (Exception)
+            {
+                preparedSettings = null;
+                StatusText = "Saved settings could not be read or validated. Open Settings to re-enter and save them. Your saved file has not been reset.";
+            }
+            UpdateSummary();
+            CommandManager.InvalidateRequerySuggested();
+        }
+        private void UpdateSummary()
+        {
+            if (preparedSettings == null) { RequestSummary = "Open Settings to choose a destination."; return; }
+            string input = string.IsNullOrWhiteSpace(SelectedText) ? PromptText : SelectedText + "\n\n" + PromptText;
+            var endpoint = HttpLlmApiService.Endpoint(preparedSettings);
+            RequestSummary = preparedSettings.AiServer + " · " + preparedSettings.Model + " · " + endpoint.AbsoluteUri +
+                "\nOnly the displayed selection and prompt are sent (" + Encoding.UTF8.GetByteCount(input ?? "") + " UTF-8 bytes). " +
+                (endpoint.IsLoopback ? "Loopback endpoint; check its own forwarding policy." : "This request leaves your computer. Remove secrets before sending.");
+        }
+        private void InvalidateCandidate()
+        {
+            hasCandidate = false;
+            Reviewed = false;
+            ResponseText = "";
+            CommandManager.InvalidateRequerySuggested();
+        }
+        private void SetCandidate(string text)
+        {
+            ResponseText = text ?? "";
+            hasCandidate = !string.IsNullOrWhiteSpace(ResponseText);
+            Reviewed = false;
+            StatusText = hasCandidate ? "Candidate ready. Review Changes and check the review box before applying. AI output can be wrong." : "No usable text was produced. Nothing can be applied.";
+        }
+        public void CancelRequest() { request?.Cancel(); }
+        public void OnClosed()
+        {
+            closed = true;
+            request?.Cancel();
+        }
+        public async Task SendToAiAsync()
+        {
+            if (closed || IsBusy || preparedSettings == null || (string.IsNullOrWhiteSpace(PromptText) && string.IsNullOrWhiteSpace(SelectedText))) return;
+            InvalidateCandidate();
             IsBusy = true;
-            ResponseText = "AI Thinking...";
-
-            var settings = _settingsService.GetSettings();
-            var activeApiService = _apiFactory.Create(settings.AiServer);
-            var response = await activeApiService.GenerateTextAsync(PromptText, SelectedText, settings);
-
-            if (response.IsSuccess)
-                ResponseText = response.Text;
-            else
-                ResponseText = $"Error: {response.ErrorMessage}";
-
-            IsBusy = false;
+            StatusText = "Generating… You can cancel this request.";
+            using (var cancellation = new CancellationTokenSource())
+            {
+                request = cancellation;
+                try
+                {
+                    var progress = new Progress<string>(text =>
+                    {
+                        if (!closed && IsBusy && ReferenceEquals(request, cancellation) && !cancellation.IsCancellationRequested)
+                            ResponseText = text;
+                    });
+                    var response = await _apiFactory.Create(preparedSettings.AiServer)
+                        .GenerateTextAsync(PromptText, SelectedText, preparedSettings, cancellation.Token, progress);
+                    cancellation.Token.ThrowIfCancellationRequested();
+                    if (response.IsSuccess) SetCandidate(response.Text);
+                    else { InvalidateCandidate(); StatusText = response.ErrorMessage; }
+                }
+                catch (OperationCanceledException) { InvalidateCandidate(); StatusText = "Request cancelled. Nothing was applied."; }
+                catch (Exception) { InvalidateCandidate(); StatusText = "The request failed. Check Settings and retry. Nothing can be applied."; }
+                finally { request = null; IsBusy = false; }
+            }
         }
 
         private void RemoveDuplicates()
@@ -81,7 +147,7 @@ namespace LLLMPluginModern.UI.ViewModels
 
             var lines = SelectedText.Split(new[] { Environment.NewLine, "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
             var uniqueLines = lines.Distinct().ToArray();
-            ResponseText = string.Join(Environment.NewLine, uniqueLines);
+            SetCandidate(string.Join(Environment.NewLine, uniqueLines));
         }
 
         private void ModifyAndReplicate()
@@ -114,7 +180,7 @@ namespace LLLMPluginModern.UI.ViewModels
                         }
                     }
                 }
-                ResponseText = sb.ToString().TrimEnd();
+                SetCandidate(sb.ToString().TrimEnd());
             }
         }
 
@@ -134,7 +200,7 @@ namespace LLLMPluginModern.UI.ViewModels
                         sb.AppendLine(line.Replace(word, string.Empty));
                     }
                 }
-                ResponseText = sb.ToString().TrimEnd();
+                SetCandidate(sb.ToString().TrimEnd());
             }
         }
 
@@ -162,7 +228,7 @@ namespace LLLMPluginModern.UI.ViewModels
                         }
                     }
                 }
-                ResponseText = sb.ToString().TrimEnd();
+                SetCandidate(sb.ToString().TrimEnd());
             }
         }
     }

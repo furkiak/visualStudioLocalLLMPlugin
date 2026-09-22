@@ -1,0 +1,22 @@
+name: Bug report
+description: A reproducible problem with the extension
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Extension version, Visual Studio edition/version, Windows version and provider/model. Never include API keys or proprietary code.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Steps, synthetic input, expected behavior and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Safe diagnostics
+      description: Error category, whether cancellation works, and whether the editor changed. Remove secrets from screenshots.

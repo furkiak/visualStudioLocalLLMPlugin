@@ -1,56 +1,31 @@
-﻿using System;
+using System;
+using System.IO;
 using System.Net.Http;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using LLLMPluginModern.Core.Interfaces;
 using LLLMPluginModern.Core.Models;
-
+using Newtonsoft.Json.Linq;
 namespace LLLMPluginModern.Infrastructure.Services
 {
-    public class GeminiApiService : ILlmApiService
+    public sealed class GeminiApiService : HttpLlmApiService
     {
-        private static readonly HttpClient _httpClient = new HttpClient();
-
-        public async Task<LlmResponse> GenerateTextAsync(string prompt, string selectedText, LlmSettings settings)
+        public GeminiApiService() { }
+        public GeminiApiService(HttpClient client, TimeSpan? timeout = null) : base(client, timeout) { }
+        protected override HttpRequestMessage CreateRequest(Uri endpoint, string input, LlmSettings settings)
         {
-            var responseModel = new LlmResponse();
-            try
-            {
-                string fullPrompt = string.IsNullOrWhiteSpace(selectedText) ? prompt : $"{selectedText}\n\n{prompt}";
-
-             
-                string endpoint = string.IsNullOrWhiteSpace(settings.Url) || !settings.Url.Contains("googleapis")
-                    ? $"https://generativelanguage.googleapis.com/v1beta/models/{settings.Model}:generateContent?key={settings.ApiKey}"
-                    : settings.Url;
-
-                var requestData = new
-                {
-                    contents = new[] { new { parts = new[] { new { text = fullPrompt } } } }
-                };
-
-                string jsonString = JsonConvert.SerializeObject(requestData);
-                var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync(endpoint, content);
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                response.EnsureSuccessStatusCode();
-
-                var jsonResponse = JObject.Parse(responseBody);
-                var resultText = jsonResponse["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString();
-
-                responseModel.Text = resultText?.Trim();
-                responseModel.IsSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                responseModel.IsSuccess = false;
-                responseModel.ErrorMessage = ex.Message;
-            }
-
-            return responseModel;
+            var request = JsonRequest(endpoint, new { contents = new[] { new { parts = new[] { new { text = input } } } } });
+            request.Headers.Add("x-goog-api-key", settings.ApiKey);
+            return request;
+        }
+        protected override async Task<string> ReadResponseAsync(StreamReader reader, CancellationToken token, IProgress<string> progress)
+        {
+            var json = await ReadJsonAsync(reader, token).ConfigureAwait(false);
+            var candidate = json["candidates"]?[0];
+            if (Text(candidate?["finishReason"]) != "STOP") throw new System.IO.InvalidDataException();
+            var text = new System.Text.StringBuilder();
+            foreach (var part in candidate?["content"]?["parts"] as JArray ?? new JArray())
+                if (part.Value<bool?>("thought") != true) text.Append(Text(part["text"]));
+            return text.ToString();
         }
     }
 }
