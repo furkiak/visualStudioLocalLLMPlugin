@@ -25,9 +25,6 @@
 			<Bitmap guid="guidImages" href="Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
 		</Bitmaps>
 	</Commands>
-	<KeyBindings>
-		<KeyBinding guid="guidLLLMPluginModernPackageCmdSet" id="Command1Id" editor="guidVSStd97" key1="1" mod1="Control" />
-	</KeyBindings>
 	<Symbols>
 		<GuidSymbol name="guidLLLMPluginModernPackage" value="{769e069e-24ac-44f5-ab7c-6983dcc1e77a}" />
 

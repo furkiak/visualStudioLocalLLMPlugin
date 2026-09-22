@@ -6,7 +6,7 @@ Review changes to selected code from Ollama or a configured cloud provider, then
 
 ## What the workflow does
 
-1. Select code in an editable file and open **Tools → Local LLM Plugin (Modern)** (default shortcut: Ctrl+1, subject to your VS bindings).
+1. Select code in an editable file and open **Tools → Local LLM Plugin (Modern)**. To add a shortcut, use Visual Studio's keyboard settings; the previous Ctrl+1 binding conflicted with an IDE chord in the tested installation.
 2. In Settings, choose a provider and an available model. Ollama defaults to `http://localhost:11434/api/generate`; install/pull the chosen model separately. Cloud model IDs are explicit inputs because availability depends on the provider/account.
 3. Check the destination, model and UTF-8 byte count. Only the displayed selection and your instruction are sent. Remove secrets before sending.
 4. Send, or use the local **Remove duplicates / Modify / Erase / Add** tools. The original selection stays read-only. Ollama chunks appear in Candidate while generating; cancellation aborts the request.

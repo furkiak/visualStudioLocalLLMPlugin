@@ -67,7 +67,8 @@ namespace LLLMPluginModern
                     ThreadHelper.ThrowIfNotOnUIThread();
                     try
                     {
-                        if (!ReferenceEquals(dte.ActiveDocument, document)) return false;
+                        var activeDocument = dte.ActiveDocument;
+                        if (activeDocument == null || !string.Equals(activeDocument.FullName, document.FullName, StringComparison.OrdinalIgnoreCase)) return false;
                         var current = document.Selection as TextSelection;
                         return current != null && captured.Matches(document.FullName,
                             textDocument.StartPoint.CreateEditPoint().GetText(textDocument.EndPoint), current.Text,
