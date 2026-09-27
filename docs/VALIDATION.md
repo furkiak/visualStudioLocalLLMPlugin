@@ -48,11 +48,11 @@ The clean `80a8e41` VSIX (3.1.1, SHA-256 `80FA248FC840FF0EDD80776674D03612206C43
 
 The fixture event log recorded 72 prompt bytes, scenario/stage/timestamps, and actual connection termination for timeout/cancel; it did not log content or credentials. The fixture exited after its owned stop file. No actual Ollama or cloud model was called. This proves the native protocol/review path, not model quality or production performance. The check did not cover native corrupt-settings recovery, stale-selection mutation, another Windows account/SKU, a fresh machine or full accessibility scaling.
 
-![First UTF-8 response line appears while the request is still generating](images/protocol-stream-3.1.1.png)
+![First UTF-8 response line appears while the request is still generating](images/protocol-stream-3.1.1.jpg)
 
 The native dark-theme check also exposed a black review-checkbox label. Version 3.1.2 explicitly binds that label to the Visual Studio text brush; it changes appearance only. A clean `e869101` build passed the same 62 tests with zero skips and produced a warning-free VSIX. Its installed DLL matched the clean build (SHA-256 `73A2989C4AF141222C8361058A1BE31CC98A54679A4CBB5E8D8F1A8EF1A408D7`). In the same dedicated Professional experimental instance, the new label was readable before and after a synthetic request; Apply remained disabled until the review box was checked. This appearance recheck did not repeat the full 3.1.1 error matrix above or call a model.
 
-![Readable dark-theme review label with Apply enabled only after review](images/review-dark-3.1.2.png)
+![Readable dark-theme review label with Apply enabled only after review](images/review-dark-3.1.2.jpg)
 
 Use a dedicated experimental VS instance and a disposable text file containing two identical lines. Do not use a production solution.
 

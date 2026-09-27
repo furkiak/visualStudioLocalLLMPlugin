@@ -4,7 +4,7 @@ Review changes to selected code from Ollama or a configured cloud provider, then
 
 **3.1.3 is a local release candidate.** The fixes described below are in this branch; existing [release downloads](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases) have not been updated. See [validation status](docs/VALIDATION.md) before using or publishing the candidate. The new appearance layout has source/build/persistence proof; native acceptance is pending.
 
-![Real Visual Studio 2022 experimental-instance review window showing an original selection, candidate and enabled Apply button](docs/images/review-dark-3.1.2.png)
+![Real Visual Studio 2022 experimental-instance review window showing an original selection, candidate and enabled Apply button](docs/images/review-dark-3.1.2.jpg)
 
 *Actual Visual Studio 2022 window from the earlier 3.1.2 check. The displayed candidate came from an isolated synthetic HTTP fixture, not a language model. The new 3.1.3 appearance has not passed native acceptance yet.*
 
