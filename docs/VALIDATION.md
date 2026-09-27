@@ -20,7 +20,27 @@ The tested Visual Studio instance used `/RootSuffix CodexLLLM`. The extension sh
 
 ## IDE smoke procedure
 
-27 September 2026 update: the isolated validation profile and external [HTTP fixture](HTTP_FIXTURE.md) support a native repeatable provider-protocol check without personal settings. The local suite passes 62 cases (all previous 47 retained), including production factory/provider/view-model over actual chunked TCP HTTP for streaming, 401, malformed NDJSON, body timeout/cancel and recovery. The expected-red `ResponseContentRead` mutation blocks the first Candidate update before completion; source restoration makes the suite pass. This is protocol fixture evidence, not native IDE/model evidence. Native checks of this new package remain separate until recorded below.
+27 September 2026 update: the isolated validation profile and external [HTTP fixture](HTTP_FIXTURE.md) support a native repeatable provider-protocol check without personal settings. The local suite passes 62 cases (all previous 47 retained), including production factory/provider/view-model over actual chunked TCP HTTP for streaming, 401, malformed NDJSON, body timeout/cancel and recovery. The expected-red `ResponseContentRead` mutation blocks the first Candidate update before completion; source restoration makes the suite pass.
+
+### Actual IDE protocol check, 27 September 2026
+
+The clean `80a8e41` VSIX (3.1.1, SHA-256 `80FA248FC840FF0EDD80776674D03612206C43F6012826AAE37D3D9C16FF0C21`) was installed into Professional 2022 17.14 `/RootSuffix CodexLLLM`. The installed DLL matched the clean build byte for byte. After installation, `/UpdateConfiguration` refreshed the experimental instance's Tools command registration. Only this instance inherited the explicit fixture profile.
+
+| Actual native action | Observed result |
+| --- | --- |
+| Send the disposable C# selection to `fixture-stream` | The UTF-8 first line appeared in Candidate while `Generating` and Apply stayed disabled. The final phase appeared later. |
+| Change scenario through Settings to `fixture-401` | Authentication status; Candidate empty; Send re-enabled; Apply disabled. |
+| Send to `fixture-malformed` | First line visible while busy, then invalid JSON status and an empty Candidate. |
+| Send to `fixture-timeout` | First line visible; about 15 seconds later timeout status, empty Candidate and re-enabled Send. |
+| Send to `fixture-cancel`, then press Cancel | Request cancelled status, empty Candidate and no editor mutation. |
+| Switch back to `fixture-stream` without restarting | Successful final Candidate in the same window; Changes showed the replacement against `int originalValue = 17;`. |
+| Check review and Apply to this test selection | Apply became enabled only after review. The editor received the synthetic three-line candidate; one native Undo restored the original clean buffer. |
+
+The fixture event log recorded 72 prompt bytes, scenario/stage/timestamps, and actual connection termination for timeout/cancel; it did not log content or credentials. The fixture exited after its owned stop file. No actual Ollama or cloud model was called. This proves the native protocol/review path, not model quality or production performance. The check did not cover native corrupt-settings recovery, stale-selection mutation, another Windows account/SKU, a fresh machine or full accessibility scaling.
+
+![First UTF-8 response line appears while the request is still generating](images/protocol-stream-3.1.1.png)
+
+The native dark-theme check also exposed a black review-checkbox label. Version 3.1.2 explicitly binds that label to the Visual Studio text brush; it changes appearance only. Its native visual recheck is recorded separately when completed.
 
 Use a dedicated experimental VS instance and a disposable text file containing two identical lines. Do not use a production solution.
 

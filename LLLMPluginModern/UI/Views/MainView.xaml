@@ -64,7 +64,8 @@
         <WrapPanel Grid.Row="5" VerticalAlignment="Center">
             <Button Content="Send to provider" Command="{Binding SendAiCommand}"/>
             <Button Content="Cancel / close" Command="{Binding CancelCommand}"/>
-            <CheckBox Content="I reviewed the candidate and changes" IsChecked="{Binding Reviewed}" VerticalAlignment="Center" Margin="4,0,16,4"/>
+            <CheckBox Content="I reviewed the candidate and changes" IsChecked="{Binding Reviewed}" VerticalAlignment="Center" Margin="4,0,16,4"
+                      Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"/>
             <Button Content="Apply to selection" Command="{Binding ApplyCommand}" ToolTip="One editor Undo reverts the replacement."/>
         </WrapPanel>
     </Grid>

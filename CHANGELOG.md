@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.2 — local release candidate, not yet published
+
+- Bind the review-checkbox label to the Visual Studio theme text brush. The actual 3.1.1 dark-theme smoke check exposed unreadable black text; review behavior and provider transport remain unchanged.
+- Record the actual isolated Professional 2022 IDE stream/401/malformed/timeout/cancel/retry and Apply/Undo checks separately from model-quality claims.
+
 ## 3.1.1 — local release candidate, not yet published
 
 - Add an explicit process-only validation profile and real loopback chunked HTTP fixture for repeatable IDE stream/error/cancel checks. Show synthetic/no-model labels, isolate settings from normal AppData/DPAPI, reject credentials and other recipients, and allow scenario changes from Settings without restarting the IDE. Keep normal startup/provider behavior.
