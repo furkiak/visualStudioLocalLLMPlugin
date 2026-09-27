@@ -10,6 +10,12 @@ namespace LLLMPluginModern.UI.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            AppearanceController.Apply(this, viewModel.TextScalePercent);
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(viewModel.TextScalePercent))
+                    AppearanceController.Apply(this, viewModel.TextScalePercent);
+            };
             if (!string.IsNullOrEmpty(viewModel.ProfileNotice)) Title = "ISOLATED HTTP FIXTURE · Local LLM tools";
 
             viewModel.CloseAction = isOk =>

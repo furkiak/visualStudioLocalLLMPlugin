@@ -9,6 +9,7 @@ namespace LLLMPluginModern.UI.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            AppearanceController.Apply(this, viewModel.TextScalePercent);
             if (!string.IsNullOrEmpty(viewModel.ProfileNotice)) Title = "ISOLATED HTTP FIXTURE · Settings";
 
             txtApiKey.Password = viewModel.ApiKey;
@@ -16,6 +17,9 @@ namespace LLLMPluginModern.UI.Views
             {
                 if (args.PropertyName == nameof(viewModel.ApiKey) && txtApiKey.Password != viewModel.ApiKey)
                     txtApiKey.Password = viewModel.ApiKey ?? "";
+                if (args.PropertyName == nameof(viewModel.TextScalePercent) &&
+                    (viewModel.TextScalePercent == 100 || viewModel.TextScalePercent == 150 || viewModel.TextScalePercent == 200))
+                    AppearanceController.Apply(this, viewModel.TextScalePercent);
             };
 
             viewModel.CloseAction = () => this.Close();

@@ -49,11 +49,12 @@ namespace LLLMPluginModern.Infrastructure.Services
             {
                 if (!File.Exists(settingsPath)) return DefaultSettings;
                 if (new FileInfo(settingsPath).Length > 65536) throw new InvalidDataException("Validation settings are too large.");
-                var saved = JObject.Parse(File.ReadAllText(settingsPath));
+                var saved = JObject.Parse(File.ReadAllText(settingsPath),
+                    new JsonLoadSettings { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error });
                 if (saved.Value<int?>("Version") != 1 || saved.Value<bool?>("ValidationOnly") != true ||
                     saved["ApiKey"] != null || saved["ProtectedApiKey"] != null)
                     throw new InvalidDataException("Validation settings cannot contain credentials or normal settings.");
-                var settings = new LlmSettings { AiServer = saved.Value<string>("AiServer"), Url = saved.Value<string>("Url"), Model = saved.Value<string>("Model") };
+                var settings = new LlmSettings { AiServer = saved.Value<string>("AiServer"), Url = saved.Value<string>("Url"), Model = saved.Value<string>("Model"), TextScalePercent = AppearancePreferences.ReadScale(saved) };
                 Validate(settings);
                 return settings;
             }
@@ -67,7 +68,7 @@ namespace LLLMPluginModern.Infrastructure.Services
                 string temporary = settingsPath + "." + Guid.NewGuid().ToString("N") + ".tmp";
                 try
                 {
-                    var saved = new { Version = 1, ValidationOnly = true, settings.AiServer, settings.Url, settings.Model };
+                    var saved = new { Version = 1, ValidationOnly = true, settings.AiServer, settings.Url, settings.Model, settings.TextScalePercent };
                     byte[] bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(saved, Formatting.Indented));
                     using (var file = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                     {
@@ -83,6 +84,7 @@ namespace LLLMPluginModern.Infrastructure.Services
 
         private void Validate(LlmSettings settings)
         {
+            if (settings != null) AppearancePreferences.Validate(settings.TextScalePercent);
             if (settings == null || settings.AiServer != "Ollama" || !string.IsNullOrEmpty(settings.ApiKey) ||
                 (settings.Model != "fixture-stream" && settings.Model != "fixture-401" && settings.Model != "fixture-malformed" &&
                  settings.Model != "fixture-timeout" && settings.Model != "fixture-cancel"))

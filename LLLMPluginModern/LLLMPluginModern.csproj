@@ -65,6 +65,8 @@
         <Compile Include="Core\Interfaces\ISettingsProfile.cs" />
 		<Compile Include="Core\Models\LlmResponse.cs" />
 		<Compile Include="Core\Models\LlmSettings.cs" />
+        <Compile Include="Core\Models\AppearancePreferences.cs" />
+        <Compile Include="UI\Views\AppearanceController.cs" />
 		<Compile Include="Infrastructure\Factories\LlmApiServiceFactory.cs" />
 		<Compile Include="Infrastructure\Services\AnthropicApiService.cs" />
 		<Compile Include="Infrastructure\Services\DialogService.cs" />
@@ -137,6 +139,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+
+        <Page Include="UI\ThemeResources.xaml">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
 		<Page Include="UI\Views\AddView.xaml">
 			<SubType>Designer</SubType>
 			<Generator>MSBuild:Compile</Generator>

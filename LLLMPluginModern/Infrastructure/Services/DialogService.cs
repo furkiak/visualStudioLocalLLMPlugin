@@ -8,6 +8,14 @@ namespace LLLMPluginModern.UI.Services
 {
     public class DialogService : IDialogService
     {
+        private static void ApplyAppearance(Window view)
+        {
+            var service = Core.Bootstrapper.ServiceProvider.GetService(typeof(ISettingsService)) as ISettingsService;
+            int scale = 100;
+            try { scale = service?.GetSettings().TextScalePercent ?? 100; }
+            catch (Exception) { /* Main/Settings already reports unreadable settings; local tools stay available. */ }
+            AppearanceController.Apply(view, scale);
+        }
         public void ShowSettings()
         {
             var vm = Core.Bootstrapper.ServiceProvider.GetService(typeof(SettingsViewModel)) as SettingsViewModel;
@@ -19,6 +27,7 @@ namespace LLLMPluginModern.UI.Services
         {
             var vm = new InputDialogViewModel(title, okButtonText);
             var view = new InputDialogView(vm);
+            ApplyAppearance(view);
             bool? success = view.ShowDialog();
 
             result = vm.InputText;
@@ -34,6 +43,7 @@ namespace LLLMPluginModern.UI.Services
         {
             var vm = new ModifyReplicateViewModel();
             var view = new ModifyReplicateView(vm);
+            ApplyAppearance(view);
             bool? success = view.ShowDialog();
 
             targetWord = vm.TargetWord;
@@ -48,6 +58,7 @@ namespace LLLMPluginModern.UI.Services
         {
             var vm = new AddViewModel();
             var view = new AddView(vm);
+            ApplyAppearance(view);
             bool? success = view.ShowDialog();
 
             textToAdd = vm.TextToAdd;

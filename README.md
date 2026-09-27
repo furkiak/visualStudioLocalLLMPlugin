@@ -2,7 +2,7 @@
 
 Review changes to selected code from Ollama or a configured cloud provider, then apply them as one editor operation. C# · WPF · Visual Studio 2022 · [AGPL-3.0](LICENSE.txt).
 
-**3.1.2 is a local release candidate.** The fixes described below are in this branch; existing [release downloads](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases) have not been updated. See [validation status](docs/VALIDATION.md) before using or publishing the candidate.
+**3.1.3 is a local release candidate.** The fixes described below are in this branch; existing [release downloads](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases) have not been updated. See [validation status](docs/VALIDATION.md) before using or publishing the candidate. The new appearance layout has source/build/persistence proof; native acceptance is pending.
 
 ## What the workflow does
 
@@ -13,6 +13,8 @@ Review changes to selected code from Ollama or a configured cloud provider, then
 5. Review **Candidate** and **Changes**, check the review box and choose **Apply to selection**. Apply requires a successful finished candidate and an unchanged target document/selection. One editor Undo is intended to revert the replacement; the real IDE verification status is recorded separately.
 
 A response remains plain text. Markdown fences and commentary are not silently stripped; inspect the whole candidate. The change view summarizes one replaced span, not a compiler-aware diff. It does not execute generated code or collect other solution files.
+
+**Settings → Text size** offers 100% / 150% / 200% actual font size, saved atomically in the selected profile. All extension dialogs follow Visual Studio's theme through dynamic resources, with opaque surfaces, explicit textbox/combobox colors, keyboard focus, wrapping actions and scrollable/resizable layouts. The preference does not change Windows DPI or editor fonts. Review, candidate and source selection remain intact after appearance-only settings changes. See [appearance behavior, contrast limits and native steps](docs/APPEARANCE.md).
 
 ## Build the candidate
 
@@ -25,7 +27,7 @@ msbuild LLLMPluginModern/LLLMPluginModern.csproj /restore /t:Rebuild /p:Configur
 
 The package is `LLLMPluginModern/bin/Release/LLLMPluginModern.vsix`. Install it in a disposable experimental instance first; follow [the smoke procedure](docs/VALIDATION.md). The build does not install or publish the extension. CI uploads a build artifact and test reports; it does not automatically publish a release.
 
-For repeatable native protocol checks without reading personal settings or API keys, use the [isolated loopback HTTP fixture](docs/HTTP_FIXTURE.md). Its visible Settings dropdown covers chunked streaming, 401, malformed NDJSON, timeout and cancel in the same IDE window. The five scenarios and subsequent review → Apply → Undo were also checked in the actual Professional 2022 IDE on 27 September 2026. It is explicitly synthetic; no model is invoked. The 62-case suite retains all prior 47 cases and checks the production provider/view-model path over actual TCP HTTP. A passing protocol fixture does not certify real Ollama or cloud-model output.
+For repeatable native protocol checks without reading personal settings or API keys, use the [isolated loopback HTTP fixture](docs/HTTP_FIXTURE.md). Its visible Settings dropdown covers chunked streaming, 401, malformed NDJSON, timeout and cancel in the same IDE window. The five scenarios and subsequent review → Apply → Undo were checked in the earlier 3.1.1 Professional 2022 IDE on 27 September 2026. It is explicitly synthetic; no model is invoked. The current **83-case suite** retains all prior 62 cases, including production provider/view-model checks over actual TCP HTTP, and adds font persistence/reload checks. New 3.1.3 native theme/keyboard/200% acceptance remains pending. A passing protocol fixture does not certify real Ollama or cloud-model output.
 
 | Environment | Declared target | Verified locally |
 | --- | --- | --- |
@@ -49,6 +51,6 @@ In the instruction box: Enter sends, Ctrl+Enter inserts a newline, Shift+Enter a
 
 ## Türkçe
 
-Seçili kodu yerel Ollama'ya veya seçtiğin sağlayıcıya gönder; özgün metni, aday kodu ve değişiklikleri inceleyerek uygula. Hata/iptal metni kod yerine yazılamaz. API anahtarı Windows kullanıcısına bağlı DPAPI ile korunur. Bu dal 3.1.2 yayın adayıdır; önceki indirmeler henüz bu düzeltmeleri içermez. Kişisel ayarlardan ayrılmış, sahte model olduğu açıkça yazan gerçek HTTP fixture ile beş senaryo aynı IDE penceresinde denenebilir. Gerçek IDE/sağlayıcı doğrulaması ile otomatik test sonuçları [ayrı kaydedilir](docs/VALIDATION.md).
+Seçili kodu yerel Ollama'ya veya seçtiğin sağlayıcıya gönder; özgün metni, aday kodu ve değişiklikleri inceleyerek uygula. Hata/iptal metni kod yerine yazılamaz. API anahtarı Windows kullanıcısına bağlı DPAPI ile korunur. Bu dal 3.1.3 yerel yayın adayıdır; önceki indirmeler henüz bu düzeltmeleri içermez. Settings üzerinden %100/%150/%200 gerçek yazı boyutu kaydedilir, eklenti pencereleri VS temasını izler. 83 test geçti; yeni yerleşimin native %200/klavye/kontrast kabulü henüz tamamlanmadı. Kişisel ayarlardan ayrılmış, sahte model olduğu açıkça yazan gerçek HTTP fixture ile beş senaryo aynı IDE penceresinde denenebilir. Gerçek IDE/sağlayıcı doğrulaması ile otomatik test sonuçları [ayrı kaydedilir](docs/VALIDATION.md).
 
 Maintained by [Furkan Akça](https://furkiak.com). Space & Tab is a personal project label, not a commercial company. [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md).

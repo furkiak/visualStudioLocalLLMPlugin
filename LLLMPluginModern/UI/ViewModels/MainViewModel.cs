@@ -27,6 +27,8 @@ namespace LLLMPluginModern.UI.ViewModels
         public string StatusText { get => _statusText; private set => SetProperty(ref _statusText, value); }
         public string RequestSummary { get => _requestSummary; private set => SetProperty(ref _requestSummary, value); }
         public string ProfileNotice => (_settingsService as ISettingsProfile)?.ProfileNotice ?? "";
+        private int _textScalePercent = 100;
+        public int TextScalePercent { get => _textScalePercent; private set => SetProperty(ref _textScalePercent, value); }
         public bool IsBusy { get => _isBusy; private set { SetProperty(ref _isBusy, value); CommandManager.InvalidateRequerySuggested(); } }
         public bool Reviewed { get => _reviewed; set { SetProperty(ref _reviewed, value); CommandManager.InvalidateRequerySuggested(); } }
         public string DiffText => Core.Models.SelectionChange.Preview(SelectedText, ResponseText);
@@ -74,7 +76,9 @@ namespace LLLMPluginModern.UI.ViewModels
             try
             {
                 preparedSettings = _settingsService.GetSettings();
+                AppearancePreferences.Validate(preparedSettings.TextScalePercent);
                 HttpLlmApiService.Endpoint(preparedSettings);
+                TextScalePercent = preparedSettings.TextScalePercent;
                 StatusText = "Review the destination and selection before sending.";
             }
             catch (Exception)

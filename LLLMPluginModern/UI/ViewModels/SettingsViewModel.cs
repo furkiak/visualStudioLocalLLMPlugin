@@ -16,6 +16,9 @@ namespace LLLMPluginModern.UI.ViewModels
         public bool IsValidationProfile => _settingsService is ISettingsProfile;
         public bool IsNormalProfile => !IsValidationProfile;
         public string[] FixtureScenarios { get; } = new[] { "fixture-stream", "fixture-401", "fixture-malformed", "fixture-timeout", "fixture-cancel" };
+        public int[] TextSizes { get; } = new[] { 100, 150, 200 };
+        private int _textScalePercent = 100;
+        public int TextScalePercent { get => _textScalePercent; set => SetProperty(ref _textScalePercent, value); }
 
         public Action CloseAction { get; set; }
 
@@ -66,6 +69,7 @@ namespace LLLMPluginModern.UI.ViewModels
             Url = currentSettings.Url;
             Model = currentSettings.Model;
             ApiKey = currentSettings.ApiKey;
+            TextScalePercent = currentSettings.TextScalePercent;
 
          
             IsUrlVisible = AiServer != "Gemini";
@@ -107,15 +111,16 @@ namespace LLLMPluginModern.UI.ViewModels
 
         private void SaveSettings()
         {
-            var newSettings = new LlmSettings { AiServer = this.AiServer, Url = this.Url, Model = this.Model, ApiKey = this.ApiKey };
+            var newSettings = new LlmSettings { AiServer = this.AiServer, Url = this.Url, Model = this.Model, ApiKey = this.ApiKey, TextScalePercent = this.TextScalePercent };
             try
             {
                 Infrastructure.Services.HttpLlmApiService.Endpoint(newSettings);
+                AppearancePreferences.Validate(newSettings.TextScalePercent);
                 if (string.IsNullOrWhiteSpace(newSettings.Model)) { ErrorText = "Enter an available model identifier for this provider."; return; }
                 _settingsService.SaveSettings(newSettings);
                 CloseAction?.Invoke();
             }
-            catch (Exception) { ErrorText = "Could not save settings. Check the model, endpoint and file permissions. Use HTTPS remotely and keep credentials out of URLs."; }
+            catch (Exception) { ErrorText = "Could not save settings. Choose 100%, 150% or 200% text size and check the model, endpoint and file permissions. Use HTTPS remotely and keep credentials out of URLs."; }
         }
     }
 }

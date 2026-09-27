@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -30,14 +30,16 @@ namespace LLLMPluginModern.Infrastructure.Services
                 try
                 {
                     if (new FileInfo(_settingsFilePath).Length > 65536) throw new InvalidDataException();
-                    var saved = JObject.Parse(File.ReadAllText(_settingsFilePath));
+                    var saved = JObject.Parse(File.ReadAllText(_settingsFilePath),
+                        new JsonLoadSettings { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error });
                     int version = saved.Value<int?>("Version") ?? 1;
                     if (version != 1 && version != 2) throw new InvalidDataException();
                     var settings = new LlmSettings
                     {
                         AiServer = saved.Value<string>("AiServer") ?? "Ollama",
                         Url = saved.Value<string>("Url") ?? "http://localhost:11434/api/generate",
-                        Model = saved.Value<string>("Model") ?? "deepseek-r1:8b"
+                        Model = saved.Value<string>("Model") ?? "deepseek-r1:8b",
+                        TextScalePercent = AppearancePreferences.ReadScale(saved)
                     };
                     if (version == 1)
                     {
@@ -67,6 +69,7 @@ namespace LLLMPluginModern.Infrastructure.Services
         public void SaveSettings(LlmSettings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
+            AppearancePreferences.Validate(settings.TextScalePercent);
             HttpLlmApiService.Endpoint(settings);
             if (Encoding.UTF8.GetByteCount(settings.ApiKey ?? "") > 16000) throw new ArgumentException("API key exceeds the settings size limit.");
             if ((settings.Model ?? "").Length > 256 || (settings.Url ?? "").Length > 2048) throw new ArgumentException("Settings exceed the field size limit.");
@@ -80,7 +83,7 @@ namespace LLLMPluginModern.Infrastructure.Services
                         protectedKey = Convert.ToBase64String(ProtectedData.Protect(clear, null, DataProtectionScope.CurrentUser));
                 }
                 finally { Array.Clear(clear, 0, clear.Length); }
-                var saved = new { Version = 2, settings.AiServer, settings.Url, settings.Model, ProtectedApiKey = protectedKey };
+                var saved = new { Version = 2, settings.AiServer, settings.Url, settings.Model, settings.TextScalePercent, ProtectedApiKey = protectedKey };
                 string directory = Path.GetDirectoryName(_settingsFilePath);
                 Directory.CreateDirectory(directory);
                 string temporary = Path.Combine(directory, ".settings-" + Guid.NewGuid().ToString("N") + ".tmp");

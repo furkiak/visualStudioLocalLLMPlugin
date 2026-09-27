@@ -1,5 +1,15 @@
 # Release candidate validation
 
+## Current appearance candidate 3.1.3 · 27 September 2026
+
+The local suite passes **83/83, zero skipped**, retaining all previous 62 cases. New tests use owned temporary files and synthetic DPAPI keys for legacy 100% defaults, font/secret roundtrips, malformed/unsupported/duplicate preferences, atomic replacement failure, isolated credential-free profiles and view-model font reload without changing the reviewed candidate, original selection or request disclosure. A changed-provider/font reload binding test uses an explicitly named adapter stub; it is not model or network evidence. Existing protocol tests still exercise production providers over ephemeral loopback TCP HTTP.
+
+Removing the normal settings font guard produces three expected failures; suppressing MainViewModel font reload produces two. Restored production source passes all 83 again. Release VSIX compilation succeeds. The new UI uses dynamic VS host resources and explicit templates instead of hardcoded dark entry/combobox colors. See [appearance and remaining native steps](APPEARANCE.md).
+
+**No native IDE or standalone fixture was started for this appearance change.** Native 3.1.3 popup/template usability, keyboard/focus, 200% layout and actual color contrast are pending. The following dated 3.1.0–3.1.2 native records and screenshots describe earlier layouts; they do not close these new appearance checks. No actual model/provider account, normal settings or OS display/theme preference was used or changed.
+
+## Earlier verification records
+
 2026-09-22 · Windows x64 · VS Professional 2022 17.14 MSBuild · SDK 10.0.401 · .NET Framework 4.8 runtime executing net472 tests.
 
 | Check | Result |

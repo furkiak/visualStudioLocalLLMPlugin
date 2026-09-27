@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.3 — local appearance candidate, not yet published
+
+- Follow Visual Studio theme resources across every extension dialog; replace low-contrast hardcoded entry borders and black-on-dark combobox text with explicit host-colored control templates, opaque surfaces and visible keyboard focus.
+- Add atomically saved 100/150/200% actual font size to normal encrypted and isolated validation profiles. Legacy files default to 100%; invalid preferences and failed writes preserve existing data. Keep the existing explicit unreadable-settings recovery workflow and DPAPI migration without plaintext backups.
+- Make Settings and local tools resizable and scrollable; stack source/candidate sections and wrap actions/review text for narrow, enlarged layouts. No native blur or decorative animation is added.
+- Retain review/apply/stale-buffer/provider/timeout/consent behavior. Pass all 83 tests, including the previous 62, real DPAPI and transient TCP HTTP fixtures, plus font persistence and settings reload. Guard/reload mutations turn the relevant tests red.
+- New native 200% layout, keyboard/dropdown focus and actual host-color contrast acceptance remain pending. Earlier native screenshots are retained as dated evidence of prior layouts.
+
 ## 3.1.2 — local release candidate, not yet published
 
 - Bind the review-checkbox label to the Visual Studio theme text brush. The actual 3.1.1 dark-theme smoke check exposed unreadable black text; review behavior and provider transport remain unchanged.

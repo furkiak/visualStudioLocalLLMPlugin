@@ -6,6 +6,8 @@ Only the disposable Visual Studio process receives `LLLM_VALIDATION_PROFILE=<abs
 
 Main and Settings titles say **ISOLATED HTTP FIXTURE**, and the destination banner says synthetic response/no model. In Settings, provider stays Ollama, endpoint is read-only, API Key is disabled, and the model dropdown lists five scenarios. The profile only accepts the exact `127.0.0.1` HTTP endpoint from its marker; other recipients, providers and model identifiers are rejected. Native profile requests expire after **15 seconds**; the normal production timeout stays two minutes.
 
+In the 3.1.3 appearance candidate, the same Settings window also saves 100/150/200% actual text size into the isolated profile. Earlier validation JSON defaults to 100%; no API-key or DPAPI field is introduced. Settings can resize/scroll and the scenario dropdown's popup uses the Visual Studio theme. These controls have source/build/persistence proof; new native popup/focus/200% acceptance remains pending. The automated suite has 83 cases with zero skips; earlier 62-case and native evidence stays dated in VALIDATION.md.
+
 ## Build and start the fixture
 
 ```powershell
