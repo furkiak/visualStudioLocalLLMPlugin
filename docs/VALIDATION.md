@@ -40,7 +40,9 @@ The fixture event log recorded 72 prompt bytes, scenario/stage/timestamps, and a
 
 ![First UTF-8 response line appears while the request is still generating](images/protocol-stream-3.1.1.png)
 
-The native dark-theme check also exposed a black review-checkbox label. Version 3.1.2 explicitly binds that label to the Visual Studio text brush; it changes appearance only. Its native visual recheck is recorded separately when completed.
+The native dark-theme check also exposed a black review-checkbox label. Version 3.1.2 explicitly binds that label to the Visual Studio text brush; it changes appearance only. A clean `e869101` build passed the same 62 tests with zero skips and produced a warning-free VSIX. Its installed DLL matched the clean build (SHA-256 `73A2989C4AF141222C8361058A1BE31CC98A54679A4CBB5E8D8F1A8EF1A408D7`). In the same dedicated Professional experimental instance, the new label was readable before and after a synthetic request; Apply remained disabled until the review box was checked. This appearance recheck did not repeat the full 3.1.1 error matrix above or call a model.
+
+![Readable dark-theme review label with Apply enabled only after review](images/review-dark-3.1.2.png)
 
 Use a dedicated experimental VS instance and a disposable text file containing two identical lines. Do not use a production solution.
 
