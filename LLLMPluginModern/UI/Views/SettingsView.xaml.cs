@@ -9,6 +9,7 @@ namespace LLLMPluginModern.UI.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            if (!string.IsNullOrEmpty(viewModel.ProfileNotice)) Title = "ISOLATED HTTP FIXTURE · Settings";
 
             txtApiKey.Password = viewModel.ApiKey;
             viewModel.PropertyChanged += (sender, args) =>

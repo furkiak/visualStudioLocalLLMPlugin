@@ -18,5 +18,7 @@
     <Compile Include="../LLLMPluginModern/Core/Interfaces/*.cs" Link="Production/Interfaces/%(Filename)%(Extension)" />
     <Compile Include="../LLLMPluginModern/Infrastructure/Services/*Service.cs" Exclude="../LLLMPluginModern/Infrastructure/Services/DialogService.cs" Link="Production/Services/%(Filename)%(Extension)" />
   <Compile Include="../LLLMPluginModern/UI/ViewModels/*.cs" Link="Production/ViewModels/%(Filename)%(Extension)" />
+    <Compile Include="../LLLMPluginModern/Infrastructure/Factories/LlmApiServiceFactory.cs" Link="Production/LlmApiServiceFactory.cs" />
+    <Compile Include="../tools/LoopbackFixture/LoopbackOllamaFixture.cs" Link="Fixture/LoopbackOllamaFixture.cs" />
   </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@ namespace LLLMPluginModern.UI.ViewModels
         public string ResponseText { get => _responseText; private set { SetProperty(ref _responseText, value); OnPropertyChanged(nameof(DiffText)); } }
         public string StatusText { get => _statusText; private set => SetProperty(ref _statusText, value); }
         public string RequestSummary { get => _requestSummary; private set => SetProperty(ref _requestSummary, value); }
+        public string ProfileNotice => (_settingsService as ISettingsProfile)?.ProfileNotice ?? "";
         public bool IsBusy { get => _isBusy; private set { SetProperty(ref _isBusy, value); CommandManager.InvalidateRequerySuggested(); } }
         public bool Reviewed { get => _reviewed; set { SetProperty(ref _reviewed, value); CommandManager.InvalidateRequerySuggested(); } }
         public string DiffText => Core.Models.SelectionChange.Preview(SelectedText, ResponseText);
@@ -86,10 +87,11 @@ namespace LLLMPluginModern.UI.ViewModels
         }
         private void UpdateSummary()
         {
-            if (preparedSettings == null) { RequestSummary = "Open Settings to choose a destination."; return; }
+            string notice = string.IsNullOrEmpty(ProfileNotice) ? "" : ProfileNotice + "\n";
+            if (preparedSettings == null) { RequestSummary = notice + "Open Settings to choose a destination."; return; }
             string input = string.IsNullOrWhiteSpace(SelectedText) ? PromptText : SelectedText + "\n\n" + PromptText;
             var endpoint = HttpLlmApiService.Endpoint(preparedSettings);
-            RequestSummary = preparedSettings.AiServer + " · " + preparedSettings.Model + " · " + endpoint.AbsoluteUri +
+            RequestSummary = notice + preparedSettings.AiServer + " · " + preparedSettings.Model + " · " + endpoint.AbsoluteUri +
                 "\nOnly the displayed selection and prompt are sent (" + Encoding.UTF8.GetByteCount(input ?? "") + " UTF-8 bytes). " +
                 (endpoint.IsLoopback ? "Loopback endpoint; check its own forwarding policy." : "This request leaves your computer. Remove secrets before sending.");
         }

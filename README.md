@@ -2,7 +2,7 @@
 
 Review changes to selected code from Ollama or a configured cloud provider, then apply them as one editor operation. C# · WPF · Visual Studio 2022 · [AGPL-3.0](LICENSE.txt).
 
-**3.1.0 is a local release candidate.** The fixes described below are in this branch; existing [release downloads](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases) have not been updated. See [validation status](docs/VALIDATION.md) before using or publishing the candidate.
+**3.1.1 is a local release candidate.** The fixes described below are in this branch; existing [release downloads](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases) have not been updated. See [validation status](docs/VALIDATION.md) before using or publishing the candidate.
 
 ## What the workflow does
 
@@ -24,6 +24,8 @@ msbuild LLLMPluginModern/LLLMPluginModern.csproj /restore /t:Rebuild /p:Configur
 ```
 
 The package is `LLLMPluginModern/bin/Release/LLLMPluginModern.vsix`. Install it in a disposable experimental instance first; follow [the smoke procedure](docs/VALIDATION.md). The build does not install or publish the extension. CI uploads a build artifact and test reports; it does not automatically publish a release.
+
+For repeatable native protocol checks without reading personal settings or API keys, use the [isolated loopback HTTP fixture](docs/HTTP_FIXTURE.md). Its visible Settings dropdown covers chunked streaming, 401, malformed NDJSON, timeout and cancel in the same IDE window. It is explicitly synthetic; no model is invoked. The 62-case suite retains all prior 47 cases and checks the production provider/view-model path over actual TCP HTTP. A passing protocol fixture does not certify real Ollama or cloud-model output.
 
 | Environment | Declared target | Verified locally |
 | --- | --- | --- |
@@ -47,6 +49,6 @@ In the instruction box: Enter sends, Ctrl+Enter inserts a newline, Shift+Enter a
 
 ## Türkçe
 
-Seçili kodu yerel Ollama'ya veya seçtiğin sağlayıcıya gönder; özgün metni, aday kodu ve değişiklikleri inceleyerek uygula. Hata/iptal metni kod yerine yazılamaz. API anahtarı Windows kullanıcısına bağlı DPAPI ile korunur. Bu dal 3.1.0 yayın adayıdır; önceki indirmeler henüz bu düzeltmeleri içermez. Gerçek IDE/sağlayıcı doğrulaması ile otomatik test sonuçları [ayrı kaydedilir](docs/VALIDATION.md).
+Seçili kodu yerel Ollama'ya veya seçtiğin sağlayıcıya gönder; özgün metni, aday kodu ve değişiklikleri inceleyerek uygula. Hata/iptal metni kod yerine yazılamaz. API anahtarı Windows kullanıcısına bağlı DPAPI ile korunur. Bu dal 3.1.1 yayın adayıdır; önceki indirmeler henüz bu düzeltmeleri içermez. Kişisel ayarlardan ayrılmış, sahte model olduğu açıkça yazan gerçek HTTP fixture ile beş senaryo aynı IDE penceresinde denenebilir. Gerçek IDE/sağlayıcı doğrulaması ile otomatik test sonuçları [ayrı kaydedilir](docs/VALIDATION.md).
 
 Maintained by [Furkan Akça](https://furkiak.com). Space & Tab is a personal project label, not a commercial company. [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md).

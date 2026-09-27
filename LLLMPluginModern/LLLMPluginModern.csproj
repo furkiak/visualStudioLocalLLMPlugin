@@ -62,6 +62,7 @@
 		<Compile Include="Core\Interfaces\ILlmApiService.cs" />
 		<Compile Include="Core\Interfaces\ILlmApiServiceFactory.cs" />
 		<Compile Include="Core\Interfaces\ISettingsService.cs" />
+        <Compile Include="Core\Interfaces\ISettingsProfile.cs" />
 		<Compile Include="Core\Models\LlmResponse.cs" />
 		<Compile Include="Core\Models\LlmSettings.cs" />
 		<Compile Include="Infrastructure\Factories\LlmApiServiceFactory.cs" />
@@ -71,6 +72,7 @@
 		<Compile Include="Infrastructure\Services\OllamaApiService.cs" />
 		<Compile Include="Infrastructure\Services\OpenAiApiService.cs" />
 		<Compile Include="Infrastructure\Services\SettingsService.cs" />
+        <Compile Include="Infrastructure\Services\ValidationSettingsService.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
 		<Compile Include="LLLMPluginModernPackage.cs" />
 		<Compile Include="UI\ViewModels\AddViewModel.cs" />

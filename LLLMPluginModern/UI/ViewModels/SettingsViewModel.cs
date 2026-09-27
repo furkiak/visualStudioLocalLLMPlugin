@@ -12,6 +12,10 @@ namespace LLLMPluginModern.UI.ViewModels
         private bool _isInitializing = true;
         private string _errorText;
         public string ErrorText { get => _errorText; private set => SetProperty(ref _errorText, value); }
+        public string ProfileNotice => (_settingsService as ISettingsProfile)?.ProfileNotice ?? "";
+        public bool IsValidationProfile => _settingsService is ISettingsProfile;
+        public bool IsNormalProfile => !IsValidationProfile;
+        public string[] FixtureScenarios { get; } = new[] { "fixture-stream", "fixture-401", "fixture-malformed", "fixture-timeout", "fixture-cancel" };
 
         public Action CloseAction { get; set; }
 
@@ -54,7 +58,7 @@ namespace LLLMPluginModern.UI.ViewModels
             try { currentSettings = _settingsService.GetSettings(); }
             catch (Exception)
             {
-                currentSettings = new LlmSettings();
+                currentSettings = (_settingsService as ISettingsProfile)?.DefaultSettings ?? new LlmSettings();
                 ErrorText = "Saved settings could not be read or unlocked. Re-enter your values; Save replaces the existing file. Cancel leaves it untouched.";
             }
 

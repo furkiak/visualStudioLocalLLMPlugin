@@ -1,6 +1,13 @@
 # Changelog
 
-## 3.1.0 — release candidate, not yet published
+## 3.1.1 — local release candidate, not yet published
+
+- Add an explicit process-only validation profile and real loopback chunked HTTP fixture for repeatable IDE stream/error/cancel checks. Show synthetic/no-model labels, isolate settings from normal AppData/DPAPI, reject credentials and other recipients, and allow scenario changes from Settings without restarting the IDE. Keep normal startup/provider behavior.
+- Retain 47 tests and add 15 profile/real HTTP workflow cases; prove early Candidate delivery with a gate and an expected-red buffering mutation.
+- Give corrupt validation settings an explicit fixture-only recovery default, so the read-only endpoint can be saved from the visible recovery form without editing files.
+- Increment local VSIX/assembly version to 3.1.1 while preserving the extension ID and existing public release assets.
+
+## 3.1.0 — previous local release candidate
 
 - Protect saved API keys with Windows DPAPI CurrentUser; migrate legacy plaintext settings atomically without a plaintext backup.
 - Require a successful, finished candidate and explicit review before replacing an unchanged editor selection. Preserve one Undo operation.

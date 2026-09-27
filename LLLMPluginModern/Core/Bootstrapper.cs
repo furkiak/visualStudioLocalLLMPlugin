@@ -14,12 +14,13 @@ namespace LLLMPluginModern.Core
         {
             var services = new ServiceCollection();
 
-            // Sınıflarımızı sisteme tanıtıyoruz
-            services.AddSingleton<ISettingsService, SettingsService>();
+            var profile = ValidationSettingsService.FromEnvironment();
+            if (profile == null) services.AddSingleton<ISettingsService, SettingsService>();
+            else services.AddSingleton<ISettingsService>(profile);
             services.AddTransient<MainViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddSingleton<IDialogService, UI.Services.DialogService>();
-            services.AddSingleton<OllamaApiService>();
+            services.AddSingleton(profile == null ? new OllamaApiService() : new OllamaApiService(null, profile.RequestTimeout));
             services.AddSingleton<GeminiApiService>();
             services.AddSingleton<OpenAiApiService>();
             services.AddSingleton<AnthropicApiService>();

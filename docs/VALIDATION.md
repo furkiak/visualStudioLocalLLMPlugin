@@ -20,6 +20,8 @@ The tested Visual Studio instance used `/RootSuffix CodexLLLM`. The extension sh
 
 ## IDE smoke procedure
 
+27 September 2026 update: the isolated validation profile and external [HTTP fixture](HTTP_FIXTURE.md) support a native repeatable provider-protocol check without personal settings. The local suite passes 62 cases (all previous 47 retained), including production factory/provider/view-model over actual chunked TCP HTTP for streaming, 401, malformed NDJSON, body timeout/cancel and recovery. The expected-red `ResponseContentRead` mutation blocks the first Candidate update before completion; source restoration makes the suite pass. This is protocol fixture evidence, not native IDE/model evidence. Native checks of this new package remain separate until recorded below.
+
 Use a dedicated experimental VS instance and a disposable text file containing two identical lines. Do not use a production solution.
 
 1. Select both lines; open Tools → Local LLM Plugin (Modern). Apply must be disabled initially.
