@@ -1,129 +1,363 @@
 <div align="center">
 
-![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
-![.NET Framework](https://img.shields.io/badge/.NET_4.7.2-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
-![Visual Studio 2022](https://img.shields.io/badge/Visual_Studio_2022-5C2D91?style=for-the-badge&logo=visual-studio&logoColor=white)
-![WPF](https://img.shields.io/badge/WPF-157EFB?style=for-the-badge&logo=windows&logoColor=white)
-![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
-![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+<img src="docs/images/icon.png" width="96" alt="Local LLM Plugin icon">
+
+# Local LLM Plugin — AI Assistant for Visual Studio
+
+**A fast, private, beautifully designed AI coding assistant that lives inside Visual Studio.**
+Run models locally with **Ollama** or **LM Studio**, or use **OpenAI**, **Anthropic** and **Google Gemini** — with streaming answers,
+one-click quick actions and a single-step undoable apply, all in a macOS-inspired *Liquid Glass* interface.
+
+![Visual Studio 2022 | 2026](https://img.shields.io/badge/Visual_Studio-2022_%7C_2026-5C2D91?style=for-the-badge&logo=visualstudio&logoColor=white)
+![x64 | Arm64](https://img.shields.io/badge/x64_%7C_Arm64-0A84FF?style=for-the-badge)
+![.NET Framework 4.7.2](https://img.shields.io/badge/.NET_Framework-4.7.2-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![WPF](https://img.shields.io/badge/WPF-Liquid_Glass-BF5AF2?style=for-the-badge)
+![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-FF9F0A?style=for-the-badge)
+
+![Ollama](https://img.shields.io/badge/Ollama-000000?style=flat-square&logo=ollama&logoColor=white)
+![LM Studio](https://img.shields.io/badge/LM_Studio-OpenAI_compatible-4B5563?style=flat-square)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
+![Anthropic](https://img.shields.io/badge/Anthropic-191919?style=flat-square&logo=anthropic&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)
+
+[English](#english) · [Türkçe](#türkçe)
+
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/assistant-dark.png">
+  <img src="docs/images/assistant-light.png" width="860" alt="The AI Assistant window: code context, quick actions, a streamed answer with a code card, and the composer">
+</picture>
 
 </div>
 
-# Visual Studio AI Assistant (Local LLM Plugin Modern)
+---
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/furkiak/visualStudioLocalLLMPlugin/refs/heads/master/SSL.png" width="600" title="ActiveRest Dashboard">
-</p>
+<a name="english"></a>
 
+## ✨ What's new in 4.0
 
-A powerful, modern, and highly optimized AI assistant extension for **Visual Studio**. Seamlessly integrate local LLMs (Ollama) and cloud-based AI models (OpenAI, Anthropic, Gemini) directly into your coding environment. 
+Version 4.0 is a ground-up refresh of the extension: new interface, new engine, new features — and a long list of fixes.
 
-Built with **Clean Architecture**, **MVVM**, and **Dependency Injection**, this plugin offers a lightning-fast, native-feeling dark theme experience that boosts your productivity without leaving your IDE.
+- **Liquid Glass redesign** — translucent glass surfaces, capsule buttons, Apple system colors, macOS traffic lights, a soft aurora backdrop and an animated *intelligence glow* while the model is writing. Dark and light themes that **follow your Visual Studio theme**, plus real **Windows 11 acrylic** blur behind the window.
+- **Live streaming** for every provider — answers appear token by token, and **Esc** stops them instantly.
+- **Conversations** — ask follow-up questions ("make it shorter", "now add tests"); the context is kept, and **Regenerate** gives you another take.
+- **Quick actions** — Explain, Refactor, Fix bugs, Optimize, Document, Unit tests and Review in one click. Type extra instructions first to refine any of them.
+- **Answers that read well** — Markdown rendering (headings, lists, bold, `inline code`) and code cards with **Copy** and **Apply** buttons.
+- **Smarter apply** — only the code is inserted (no chatty text), indentation is matched to where it lands, the file's line endings are kept, and the whole change is **one Ctrl+Z**.
+- **Insert below** in addition to *replace selection*, and **partial apply**: highlight part of an answer and press Shift+Enter.
+- **Reasoning models** — the *Thought process* of DeepSeek-R1, Qwen3, gpt-oss and other thinking models is shown separately from the answer instead of polluting it.
+- **LM Studio and any OpenAI-compatible server** (llama.cpp, vLLM, Jan, LocalAI…) as a first-class local provider.
+- **Model picker** — press ↻ in Settings to list the models installed in Ollama or available to your API key, and **Test connection** to check everything at once.
+- **Secure by default** — API keys are encrypted with Windows **DPAPI**, stored **per provider**, and the Gemini key is sent in a header instead of the URL.
+- **More text tools** — Sort, Reverse, Remove empty lines, Trim trailing whitespace, UPPERCASE / lowercase join Remove duplicates, Modify & replicate, Erase and Add.
+- **Visual Studio 2026 and Arm64** support, an editor right-click menu entry, and a crisp vector icon in menus.
 
-## Features
+<details>
+<summary><b>Bugs fixed since 3.x</b></summary>
 
-* **Multi-Provider AI Support:** Switch seamlessly between **Ollama (Local)**, **OpenAI (ChatGPT)**, **Anthropic (Claude)**, and **Google Gemini**.
-* **Smart Defaults:** Automatically configures API URLs and model names based on the selected provider.
-* **Modern WPF Dark Theme:** A sleek, eye-friendly interface that perfectly matches Visual Studio's native dark mode.
-* **Lightning Fast Text Application:** Utilizes Visual Studio's `UndoContext` to instantly apply massive code blocks without freezing the editor, allowing single-step Undo (`Ctrl+Z`).
-* **Partial Selection Injection:** Select a specific part of the AI's response to inject only that portion into your code, ignoring unnecessary conversational text.
-* **Advanced Text Manipulation Tools:**
-    * ` Remove Duplicates`: Instantly cleans up duplicate lines in your selection.
-    * ` Modify & Replicate`: Find a target word and duplicate the line for multiple new variables in one click.
-    * ` Erase`: Quickly strip specific words or characters from a massive text block.
-    * ` Add`: Prepend or append specific text to every selected line.
+- Visual Studio could crash when a request failed (an exception escaped an `async void` command); the busy state could also get stuck.
+- Pressing Shift+Enter while the model was still thinking inserted the text *"AI Thinking…"* — or an *"Error: …"* message — into your code.
+- Requests to local models failed after 100 seconds; long generations are no longer cut off (an idle timeout is used instead, configurable).
+- The OpenAI and Anthropic providers ignored any URL containing `localhost`, so local OpenAI-compatible servers could not be used.
+- Text tools dropped the final line break of a full-line selection, gluing the next line onto the result. *Remove duplicates* also deleted every blank line.
+- Enter sent the prompt even while typing in the code box; Ctrl+Enter did not add a new line as documented.
+- Switching providers in Settings carried the previous provider's API key over to the new one.
+- A corrupt `settings.json` broke the extension; it is now backed up and defaults are used.
+- Retired default models of 3.x (Gemini 1.5 Pro and the old Anthropic default) are replaced automatically when old settings are migrated.
+- Applying to a non-text document (e.g. a designer) crashed; it now falls back to the clipboard. Dialogs are properly owned by Visual Studio and never hide behind it.
 
-## Keyboard Shortcuts (Power User Friendly)
+</details>
 
-The UI is entirely optimized for keyboard-only navigation:
-* **`Ctrl + 1`**: Open the AI Assistant (Global VS Shortcut).
-* **`Enter`**: Send your prompt to the AI.
-* **`Shift + Enter`**: Apply the AI's response directly to your code editor and close the window.
-* **`Ctrl + Enter`**: Add a new line within the prompt input box.
-* **`Esc`**: Cancel and close the assistant.
+## 📸 Screenshots
 
-## Installation
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/streaming-dark.png" alt="Streaming answer with the animated intelligence glow"><br><sub><b>Streaming</b> — the composer glows while the model writes; Esc stops it.</sub></td>
+    <td width="50%"><img src="docs/images/welcome-light.png" alt="Welcome screen in the light theme"><br><sub><b>Light theme</b> — follows your Visual Studio theme automatically.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/tools-and-errors-dark.png" alt="Text tool result and a friendly connection error"><br><sub><b>Text tools &amp; clear errors</b> — every error says what to do next.</sub></td>
+    <td width="50%"><img src="docs/images/settings-dark.png" alt="Settings window"><br><sub><b>Settings</b> — per-provider profiles, model list, connection test.</sub></td>
+  </tr>
+</table>
 
-1. Download the latest `.vsix` release from the [Releases](../../releases) page.
-2. Double-click the downloaded file to open the VSIX Installer.
-3. Select **Visual Studio** and click Install.
-4. Restart Visual Studio. 
-5. You can find the tool under the **Tools -> Local LLM Plugin (Modern)** menu, or simply press `Ctrl + 1`.
+## 🚀 Features
 
-## Architecture & Technologies
+### AI assistant
+| | |
+|---|---|
+| **Streaming chat** | Answers stream live from every provider. Follow-up questions keep the conversation; *New chat* (Ctrl+N) starts over. |
+| **Quick actions** | Explain · Refactor · Fix bugs · Optimize · Document · Unit tests · Review. Add details in the prompt box to steer them. |
+| **Code context** | The current selection, file name and language are sent automatically. Edit the code in the context box, or enable **Whole file** to give the model the entire document. |
+| **Thought process** | Reasoning from thinking models is shown in a collapsible section, separate from the answer. |
+| **Regenerate & Use as input** | Ask again for a different answer, or move a result into the code context to keep transforming it. |
+| **Status & stats** | Live progress, token count and timing for every answer. |
 
-This extension was rebuilt from scratch to meet Enterprise standards:
-* **Framework:** .NET Framework 4.7.2 / WPF
-* **Architecture:** Clean Architecture & MVVM (Model-View-ViewModel)
-* **Patterns:** Dependency Injection (Microsoft.Extensions.DependencyInjection), Factory Pattern (for AI providers)
-* **Performance:** `StringBuilder` and `StringReader` for handling large text blocks without memory leaks.
+### Applying results
+| | |
+|---|---|
+| **Apply** (Shift+Enter) | Replaces the selection with the code from the latest answer — prose and Markdown fences are stripped. |
+| **Insert below** (Ctrl+Shift+Enter) | Inserts the result under the selection, perfect for tests and documentation. |
+| **Partial apply** | Highlight any part of an answer before applying to insert only that part. |
+| **Per-block apply** | Every code card has its own Copy and Apply buttons. |
+| **Indentation & line endings** | The result is re-indented to fit where it is inserted and uses the document's line endings. |
+| **One undo step** | The edit goes through the Visual Studio editor API as a single transaction — Ctrl+Z restores everything. |
 
-## Configuration
+### Text tools (no AI needed)
+Remove duplicate lines · Modify & replicate · Erase text · Add to every line · Sort A→Z / Z→A · Reverse lines · Remove empty lines · Trim trailing whitespace · UPPERCASE · lowercase.
+Every tool keeps your line endings and the trailing line break, and its result can be applied, copied or chained into the next tool.
 
-1. Open the plugin (`Ctrl + 1`).
-2. Click the **⚙️ Settings** button on the top toolbar.
-3. Select your preferred **AI Provider**.
-4. Enter your API Key (Securely stored as a `PasswordBox`). URLs and Model names will be auto-filled, but you can override them.
-5. Click **Save Settings**.
+## 🔌 Supported providers
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+| Provider | Runs | API key | Notes |
+|---|---|---|---|
+| **Ollama** | Locally | – | Default. Lists your installed models; shows the thinking of reasoning models. |
+| **LM Studio / OpenAI-compatible** | Locally | Optional | LM Studio, llama.cpp server, vLLM, Jan, LocalAI and any server with the OpenAI Chat Completions API. |
+| **OpenAI** | Cloud | Required | Chat Completions with streaming. |
+| **Anthropic** | Cloud | Required | Messages API with streaming. |
+| **Google Gemini** | Cloud | Required | `streamGenerateContent`; the key is sent in the `x-goog-api-key` header. |
 
+Each provider keeps its own URL, model, API key, temperature and token limit, so you can switch between them freely.
+Default endpoints and models are pre-filled — press **↻** next to *Model* to pick from what your server or account actually offers.
 
-## 🇹🇷 Türkçe Açıklama
+## 📦 Installation
 
-# Visual Studio AI Asistanı (Local LLM Plugin Modern)
+1. Download the latest `.vsix` from the [Releases](../../releases) page.
+2. Double-click it and choose your Visual Studio instances (Visual Studio 2022 17.0 or later, including **Visual Studio 2026**, on x64 or Arm64).
+3. Restart Visual Studio.
+4. Open the assistant with **Ctrl+1**, from **Tools ▸ AI Assistant (Local LLM)**, or by right-clicking in the code editor.
 
-**Visual Studio** için geliştirilmiş güçlü, modern ve yüksek performanslı bir yapay zeka asistanı eklentisidir. Yerel LLM'leri (Ollama) ve bulut tabanlı yapay zeka modellerini (OpenAI, Anthropic, Gemini) doğrudan kodlama ortamınıza sorunsuz bir şekilde entegre eder.
+### Quick start with a local model (Ollama)
 
-**Clean Architecture (Temiz Mimari)**, **MVVM** ve **Dependency Injection** kullanılarak inşa edilen bu eklenti, IDE'nizden ayrılmadan üretkenliğinizi artıran, VS'nin kendi doğasına uygun, şık ve hızlı bir karanlık tema (Dark Theme) deneyimi sunar.
+```bash
+# 1. Install Ollama from https://ollama.com, then download a coding model:
+ollama pull qwen2.5-coder:7b
 
-## Özellikler
+# 2. Make sure it is running (it usually starts automatically):
+ollama serve
+```
 
-* **Çoklu Yapay Zeka Desteği:** **Ollama (Yerel)**, **OpenAI (ChatGPT)**, **Anthropic (Claude)** ve **Google Gemini** arasında tek tıkla geçiş yapın.
-* **Akıllı Varsayılanlar:** Seçilen sağlayıcıya göre API URL'lerini ve model adlarını otomatik olarak doldurur.
-* **Modern WPF Karanlık Tema:** Visual Studio'nin yerel karanlık moduna mükemmel uyum sağlayan, göz yormayan şık bir arayüz.
-* **Işık Hızında Koda Uygulama:** Devasa kod bloklarını editörü dondurmadan anında uygulamak için Visual Studio'nun `UndoContext` yapısını kullanır. İşlemi tek seferde geri almanızı (`Ctrl+Z`) sağlar.
-* **Kısmi Metin Enjeksiyonu:** Yapay zekanın verdiği uzun cevabın sadece sizin seçtiğiniz belirli bir kısmını editöre aktararak gereksiz sohbet metinlerinden kurtulmanızı sağlar.
-* **Gelişmiş Metin İşleme Araçları:**
-    * `Remove Duplicates`: Seçiminizdeki yinelenen satırları anında temizler.
-    * `Modify & Replicate`: Hedef bir kelimeyi bulur ve tek tıkla birden fazla yeni değişken için o satırı çoğaltır.
-    * `Erase`: Büyük bir kod bloğundan belirli kelimeleri veya karakterleri hızla siler.
-    * `Add`: Seçilen her satırın başına veya sonuna belirli bir metni ekler.
+Select some code in Visual Studio, press **Ctrl+1**, pick a quick action — done. Nothing leaves your machine.
 
-## Klavye Kısayolları (Hızlı Kullanım)
+### Using a cloud provider
 
-Arayüz, fare kullanmadan tamamen klavye ile yönetilmek üzere optimize edilmiştir:
-* **`Ctrl + 1`**: AI Asistanını açar (Global VS Kısayolu).
-* **`Enter`**: Prompt'unuzu yapay zekaya gönderir.
-* **`Shift + Enter`**: Yapay zekanın cevabını doğrudan kod editörünüze uygular ve pencereyi kapatır.
-* **`Ctrl + Enter`**: Prompt giriş kutusu içinde yeni bir alt satıra geçer.
-* **`Esc`**: İşlemi iptal eder ve asistanı kapatır.
+Open **Settings** (Ctrl+, or the sliders icon), choose the provider, paste your API key, press **↻** to load the models, then **Test connection** and **Save**.
 
-## Kurulum
+## ⌨️ Keyboard shortcuts
 
-1. [Releases](../../releases) sayfasından en son `.vsix` sürümünü indirin.
-2. İndirilen dosyaya çift tıklayarak VSIX Yükleyicisini açın.
-3. **Visual Studio**'yi seçin ve Kur'a tıklayın.
-4. Visual Studio'yu yeniden başlatın.
-5. Aracı **Araçlar (Tools) -> Local LLM Plugin (Modern)** menüsü altında bulabilir veya doğrudan `Ctrl + 1` tuşlarına basabilirsiniz.
+| Shortcut | Action |
+|---|---|
+| `Ctrl+1` | Open the assistant (global Visual Studio shortcut) |
+| `Enter` | Send the prompt |
+| `Ctrl+Enter` | New line in the prompt |
+| `Shift+Enter` | Apply the result to the editor (replace selection) |
+| `Ctrl+Shift+Enter` | Insert the result below the selection |
+| `Esc` | Stop the answer while it is streaming · close the window otherwise |
+| `Ctrl+N` | New chat |
+| `Ctrl+,` | Settings |
 
-## Mimari ve Teknolojiler
+## ⚙️ Settings
 
-Bu eklenti, tam bir Kurumsal (Enterprise) standartları karşılayacak şekilde sıfırdan yeniden yazılmıştır:
-* **Framework:** .NET Framework 4.7.2 / WPF
-* **Mimari:** Clean Architecture & MVVM (Model-View-ViewModel)
-* **Tasarım Desenleri:** Dependency Injection (Microsoft.Extensions.DependencyInjection), Factory Pattern (AI sağlayıcıları için)
-* **Performans:** Bellek sızıntısı olmadan büyük metin bloklarını işlemek için `StringBuilder` ve `StringReader` kullanımı.
+| Setting | Description |
+|---|---|
+| Provider, Endpoint URL, API key, Model | Stored per provider. Leave the URL empty for the default endpoint. Full endpoints such as `…/api/generate` or `…/chat/completions` are accepted too. |
+| Temperature, Max output tokens | Optional; empty means the model's default (recommended — some newer models reject custom values). |
+| Idle timeout | How long to wait **without receiving data** before giving up (default 300 s). Long answers are never cut off. |
+| System prompt | Instructions sent with every request. *Reset to default* restores the built-in prompt. |
+| Whole file by default | Sends the full document as context (up to 120,000 characters). |
+| Match indentation | Re-indents applied code to fit the insertion point. |
+| Show thought process | Displays reasoning from thinking models. |
+| Theme | *Auto* follows Visual Studio; or force Dark / Light. |
+| Translucent glass | Windows 11 acrylic backdrop (22H2 or later). |
 
-## Yapılandırma (Ayarlar)
+Settings live in `%AppData%\LLLMPluginModern\settings.json`. API keys are encrypted with DPAPI for your Windows user account. Settings from version 3.x are migrated automatically the first time 4.0 starts.
 
-1. Eklentiyi açın (`Ctrl + 1`).
-2. Üst araç çubuğundaki **⚙️ Settings (Ayarlar)** butonuna tıklayın.
-3. Tercih ettiğiniz **AI Provider (Yapay Zeka Sağlayıcısını)** seçin.
-4. API Anahtarınızı girin (Güvenli bir şekilde `PasswordBox` olarak tutulur). URL'ler ve Model isimleri otomatik doldurulacaktır, isterseniz değiştirebilirsiniz.
-5. **Save Settings (Ayarları Kaydet)** butonuna tıklayın.
+## 🏗️ Architecture
 
-## Katkıda Bulunma
-Pull Request'ler kabul edilmektedir. Büyük değişiklikler için, lütfen önce neyi değiştirmek istediğinizi tartışmak üzere bir konu (issue) açın.
+```
+LLLMPluginModern/
+├── Core/              Pure .NET, no WPF or Visual Studio dependencies
+│   ├── Interfaces/    ILlmApiService, ISettingsService, IEditorService, IDialogService …
+│   ├── Models/        AppSettings (per-provider profiles), LlmRequest/Response, EditorContext
+│   ├── Prompts/       System prompt, quick actions, message building
+│   └── Text/          Text tools, Markdown reader, <think> filter, language map
+├── Infrastructure/
+│   ├── Http/          Shared HttpClient (proxy-aware, loopback bypass), endpoint normalization
+│   ├── Services/      LlmApiServiceBase + Ollama / OpenAI / Anthropic / Gemini streaming clients, SettingsService (DPAPI)
+│   └── Factories/     Provider → service
+├── UI/
+│   ├── Themes/        Dark.xaml, Light.xaml, Icons.xaml (vector icons), Controls.xaml (Liquid Glass styles)
+│   ├── Controls/      GlassWindow (custom chrome, Win11 acrylic), TrafficLights, Icon
+│   ├── ViewModels/    MVVM: chat, settings and dialogs; async commands
+│   └── Views/         Assistant window, settings and dialogs
+├── VisualStudio/      Command, editor integration (ITextBuffer edits, undo transaction), dialog owner, theme detection
+└── AppServices.cs     Composition root
+```
+
+Design decisions:
+
+- **Streaming pipeline** — one base class handles sending, user cancellation, idle timeouts, HTTP/JSON error extraction and friendly connection messages; each provider only parses its own stream format. UI updates are batched (about 20 per second) so even very fast local models keep the window smooth.
+- **Modern editor API** — edits use `ITextBuffer` with an undo transaction instead of DTE `TextSelection`, so they are atomic, fast, and free of auto-format side effects.
+- **No dependency conflicts in `devenv.exe`** — the extension ships only `Newtonsoft.Json` (which Visual Studio already loads). The DI container and polyfill packages of 3.x were replaced by a small composition root.
+- **Theme-aware resources** — every color is a `DynamicResource`, so switching Dark/Light re-skins open windows instantly.
+
+## 🛠️ Building from source
+
+Requirements: Visual Studio 2022 (17.x) or Visual Studio 2026 with the **Visual Studio extension development** workload.
+
+1. Open `LLLMPluginModern.sln`.
+2. Build — NuGet packages restore automatically.
+3. Press **F5** to start an experimental instance of Visual Studio with the extension loaded.
+
+The `.vsix` is written to `LLLMPluginModern/bin/<Configuration>/`.
+
+## 🩺 Troubleshooting
+
+| Message | What to do |
+|---|---|
+| *Could not connect to http://localhost:11434* | Start Ollama (`ollama serve`) or LM Studio's server, and check the URL in Settings. |
+| *Ollama: model "…" not found* | Run `ollama pull <model>` or pick an installed model with ↻. |
+| *… returned 401 / 403* | Check the API key for that provider in Settings. |
+| *… returned 404* | Check the endpoint URL and the model name. |
+| *No data from … for N seconds* | A large model may still be loading — try again or raise the idle timeout. |
+| Behind a corporate proxy | Cloud requests use the Windows proxy settings; local addresses always bypass the proxy. |
+
+## 🤝 Contributing
+
+Pull requests are welcome. For larger changes, please open an issue first to discuss what you would like to change.
+
+## 📄 License
+
+[GNU Affero General Public License v3.0](LICENSE.txt) — © Furkan Akça · Spaceandtab
+
+---
+
+<a name="türkçe"></a>
+
+## 🇹🇷 Türkçe
+
+### Local LLM Plugin — Visual Studio için Yapay Zekâ Asistanı
+
+**Visual Studio'nun içinde çalışan; hızlı, gizliliğe saygılı ve şık tasarımlı bir yapay zekâ kodlama asistanı.**
+Modelleri **Ollama** veya **LM Studio** ile tamamen yerelde çalıştırın ya da **OpenAI**, **Anthropic** ve **Google Gemini** kullanın.
+Akış hâlinde gelen yanıtlar, tek tıkla hızlı eylemler ve tek adımda geri alınabilen uygulama — hepsi macOS'tan ilham alan *Liquid Glass* arayüzünde.
+
+### ✨ 4.0 ile gelen yenilikler
+
+- **Liquid Glass tasarım** — yarı saydam cam yüzeyler, kapsül düğmeler, Apple sistem renkleri, macOS trafik ışıkları, yumuşak "aurora" arka plan ve model yazarken animasyonlu *zekâ parıltısı*. **Visual Studio temasını takip eden** koyu ve açık tema; Windows 11'de pencere arkasında gerçek **akrilik bulanıklık**.
+- **Canlı akış (streaming)** — tüm sağlayıcılarda yanıt kelime kelime gelir; **Esc** ile anında durdurulur.
+- **Sohbet** — devam soruları sorun ("daha kısa yap", "şimdi test ekle"); bağlam korunur. **Yeniden üret** ile farklı bir yanıt alın.
+- **Hızlı eylemler** — Açıkla, Yeniden düzenle (Refactor), Hataları düzelt, Optimize et, Belgele, Birim testleri, Kod incelemesi. Ek talimatı önce yazarak eylemi yönlendirebilirsiniz.
+- **Okunaklı yanıtlar** — Markdown görüntüleme (başlık, liste, kalın, `satır içi kod`) ve **Kopyala** / **Uygula** düğmeli kod kartları.
+- **Akıllı uygulama** — editöre yalnızca kod eklenir (açıklama metni değil), girinti eklenen yere göre ayarlanır, dosyanın satır sonları korunur ve tüm değişiklik **tek Ctrl+Z** ile geri alınır.
+- **Alta ekle** seçeneği ve **kısmi uygulama**: yanıtın bir bölümünü seçip Shift+Enter'a basın.
+- **Akıl yürüten modeller** — DeepSeek-R1, Qwen3, gpt-oss gibi modellerin *düşünce süreci* yanıttan ayrı, katlanabilir bir bölümde gösterilir.
+- **LM Studio ve tüm OpenAI uyumlu sunucular** (llama.cpp, vLLM, Jan, LocalAI…) birinci sınıf yerel sağlayıcı olarak desteklenir.
+- **Model seçici** — Ayarlar'da ↻ ile Ollama'da kurulu ya da API anahtarınızla erişilebilen modelleri listeleyin; **Bağlantıyı test et** ile her şeyi tek seferde doğrulayın.
+- **Güvenlik** — API anahtarları Windows **DPAPI** ile şifrelenir ve **sağlayıcı başına** ayrı saklanır; Gemini anahtarı URL yerine başlıkta gönderilir.
+- **Daha fazla metin aracı** — Sırala, Ters çevir, Boş satırları sil, Satır sonu boşluklarını kırp, BÜYÜK / küçük harf; Tekrarları sil, Değiştir ve çoğalt, Sil ve Ekle araçlarına katıldı.
+- **Visual Studio 2026 ve Arm64** desteği, editör sağ tık menüsü ve menülerde net bir vektör ikon.
+
+<details>
+<summary><b>3.x'e göre giderilen hatalar</b></summary>
+
+- Bir istek başarısız olduğunda Visual Studio çökebiliyordu (`async void` komuttan istisna kaçıyordu); "meşgul" durumu takılı kalabiliyordu.
+- Model hâlâ düşünürken Shift+Enter'a basmak koda *"AI Thinking…"* ya da *"Error: …"* metnini yazıyordu.
+- Yerel modellere istekler 100 saniyede kesiliyordu; artık uzun yanıtlar kesilmiyor (bunun yerine ayarlanabilir bir boşta kalma süresi kullanılıyor).
+- OpenAI ve Anthropic sağlayıcıları `localhost` içeren adresleri yok sayıyordu; yerel OpenAI uyumlu sunucular kullanılamıyordu.
+- Metin araçları tam satır seçimlerinde son satır sonunu siliyor, sonraki satırı sonuca yapıştırıyordu. *Tekrarları sil* tüm boş satırları da siliyordu.
+- Enter, kod kutusuna yazarken bile istemi gönderiyordu; Ctrl+Enter belgelendiği gibi yeni satır eklemiyordu.
+- Ayarlar'da sağlayıcı değiştirmek önceki sağlayıcının API anahtarını yenisine taşıyordu.
+- Bozuk bir `settings.json` eklentiyi bozuyordu; artık yedeklenip varsayılanlar kullanılıyor.
+- 3.x'in emekliye ayrılan varsayılan modelleri (Gemini 1.5 Pro ve eski Anthropic varsayılanı) eski ayarlar taşınırken otomatik olarak güncelleniyor.
+- Metin olmayan bir belgeye (ör. tasarımcı) uygulamak çöküyordu; artık sonuç panoya kopyalanıyor. Pencereler Visual Studio'ya doğru şekilde bağlı; arkada kalmıyor.
+
+</details>
+
+### 🔌 Desteklenen sağlayıcılar
+
+| Sağlayıcı | Çalışma | API anahtarı | Not |
+|---|---|---|---|
+| **Ollama** | Yerel | – | Varsayılan. Kurulu modelleri listeler; akıl yürüten modellerin düşüncelerini gösterir. |
+| **LM Studio / OpenAI uyumlu** | Yerel | İsteğe bağlı | LM Studio, llama.cpp, vLLM, Jan, LocalAI ve OpenAI Chat Completions API'si sunan her sunucu. |
+| **OpenAI** | Bulut | Gerekli | Akışlı Chat Completions. |
+| **Anthropic** | Bulut | Gerekli | Akışlı Messages API. |
+| **Google Gemini** | Bulut | Gerekli | `streamGenerateContent`; anahtar `x-goog-api-key` başlığında gönderilir. |
+
+Her sağlayıcının URL'si, modeli, API anahtarı, sıcaklığı ve token sınırı ayrı saklanır; aralarında özgürce geçiş yapabilirsiniz.
+
+### 📦 Kurulum
+
+1. [Releases](../../releases) sayfasından en son `.vsix` dosyasını indirin.
+2. Çift tıklayın ve Visual Studio sürümlerinizi seçin (Visual Studio 2022 17.0 ve üzeri, **Visual Studio 2026** dahil; x64 veya Arm64).
+3. Visual Studio'yu yeniden başlatın.
+4. Asistanı **Ctrl+1** ile, **Tools ▸ AI Assistant (Local LLM)** menüsünden ya da kod editöründe sağ tıklayarak açın.
+
+**Yerel modelle hızlı başlangıç (Ollama):**
+
+```bash
+# 1. https://ollama.com adresinden Ollama'yı kurun ve bir kod modeli indirin:
+ollama pull qwen2.5-coder:7b
+
+# 2. Çalıştığından emin olun (genellikle otomatik başlar):
+ollama serve
+```
+
+Visual Studio'da kod seçin, **Ctrl+1**'e basın, bir hızlı eylem seçin — bu kadar. Hiçbir veri bilgisayarınızdan çıkmaz.
+
+**Bulut sağlayıcı kullanmak için:** **Ayarlar**'ı açın (Ctrl+, veya kaydırıcı simgesi), sağlayıcıyı seçin, API anahtarınızı yapıştırın, **↻** ile modelleri yükleyin, **Bağlantıyı test et** ve **Kaydet**.
+
+### ⌨️ Klavye kısayolları
+
+| Kısayol | İşlev |
+|---|---|
+| `Ctrl+1` | Asistanı açar (global Visual Studio kısayolu) |
+| `Enter` | İstemi gönderir |
+| `Ctrl+Enter` | İstem kutusunda yeni satır |
+| `Shift+Enter` | Sonucu editöre uygular (seçimi değiştirir) |
+| `Ctrl+Shift+Enter` | Sonucu seçimin altına ekler |
+| `Esc` | Akış sürerken yanıtı durdurur, aksi hâlde pencereyi kapatır |
+| `Ctrl+N` | Yeni sohbet |
+| `Ctrl+,` | Ayarlar |
+
+### ⚙️ Ayarlar
+
+- **Sağlayıcı, Uç nokta URL'si, API anahtarı, Model** — sağlayıcı başına saklanır. Varsayılan uç nokta için URL'yi boş bırakın; `…/api/generate` veya `…/chat/completions` gibi tam adresler de kabul edilir.
+- **Sıcaklık, Maksimum çıktı tokenı** — isteğe bağlıdır; boş bırakmak modelin varsayılanını kullanır (önerilir).
+- **Boşta kalma süresi** — veri gelmeden ne kadar bekleneceği (varsayılan 300 sn). Uzun yanıtlar asla kesilmez.
+- **Sistem istemi** — her istekle gönderilen talimatlar; *Varsayılana dön* ile sıfırlanır.
+- **Varsayılan olarak tüm dosya**, **Girintiyi eşleştir**, **Düşünce sürecini göster**, **Tema** (Otomatik / Koyu / Açık), **Saydam cam** (Windows 11).
+
+Ayarlar `%AppData%\LLLMPluginModern\settings.json` dosyasındadır. API anahtarları Windows kullanıcı hesabınız için DPAPI ile şifrelenir. 3.x ayarları, 4.0 ilk açıldığında otomatik olarak taşınır.
+
+### 🏗️ Mimari
+
+- **Core** — WPF ve Visual Studio bağımlılığı olmayan saf .NET katmanı: arayüzler, modeller, istem oluşturma, metin araçları, Markdown okuyucu.
+- **Infrastructure** — paylaşılan HttpClient, akış tabanlı sağlayıcı istemcileri (Ollama / OpenAI / Anthropic / Gemini) ve DPAPI ile şifreli ayar servisi.
+- **UI** — MVVM; Liquid Glass tema sözlükleri, özel cam pencere (Windows 11 akrilik), vektör ikonlar, sohbet, ayarlar ve diyaloglar.
+- **VisualStudio** — komut, modern editör API'siyle (ITextBuffer + geri alma işlemi) düzenleme, diyalog sahipliği ve tema algılama.
+- `devenv.exe` içinde bağımlılık çakışması yok: eklenti yalnızca Visual Studio'nun zaten yüklediği `Newtonsoft.Json`'ı taşır.
+
+### 🛠️ Kaynaktan derleme
+
+Gereksinim: **Visual Studio extension development** iş yüküyle Visual Studio 2022 (17.x) veya Visual Studio 2026.
+`LLLMPluginModern.sln` dosyasını açın, derleyin ve eklentinin yüklü olduğu deneysel Visual Studio örneğini başlatmak için **F5**'e basın.
+
+### 🩺 Sorun giderme
+
+| Mesaj | Çözüm |
+|---|---|
+| *Could not connect to http://localhost:11434* | Ollama'yı (`ollama serve`) veya LM Studio sunucusunu başlatın, Ayarlar'daki URL'yi kontrol edin. |
+| *Ollama: model "…" not found* | `ollama pull <model>` çalıştırın veya ↻ ile kurulu bir model seçin. |
+| *… returned 401 / 403* | O sağlayıcının API anahtarını kontrol edin. |
+| *… returned 404* | Uç nokta URL'sini ve model adını kontrol edin. |
+| *No data from … for N seconds* | Büyük bir model hâlâ yükleniyor olabilir; tekrar deneyin veya bekleme süresini artırın. |
+
+### 🤝 Katkıda bulunma
+
+Pull Request'ler memnuniyetle karşılanır. Büyük değişiklikler için lütfen önce bir konu (issue) açarak neyi değiştirmek istediğinizi tartışın.
+
+### 📄 Lisans
+
+[GNU Affero General Public License v3.0](LICENSE.txt) — © Furkan Akça · Spaceandtab
