@@ -24,7 +24,7 @@ one-click quick actions and a single-step undoable apply, all in a macOS-inspire
 ![Anthropic](https://img.shields.io/badge/Anthropic-191919?style=flat-square&logo=anthropic&logoColor=white)
 ![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)
 
-[English](#english) · [Türkçe](#türkçe)
+[English](#english) · [Türkçe](#turkce)
 
 <br>
 
@@ -227,6 +227,8 @@ Pushing a tag such as `v4.0.0` (it must match the version in `source.extension.v
 1. creates a GitHub release with the `.vsix` and the notes from `docs/release-notes/<tag>.md`;
 2. publishes to the Visual Studio Marketplace using [`marketplace/publishManifest.json`](marketplace/publishManifest.json) and [`marketplace/overview.md`](marketplace/overview.md) — when the repository secret `VS_MARKETPLACE_TOKEN` (an Azure DevOps personal access token with the *Marketplace ▸ Manage* scope) is set.
 
+Without a local tag: open **Actions ▸ Build & Release ▸ Run workflow** on `master` and tick *Create the release*; the commit is tagged `v<manifest version>` and the same steps run.
+
 ## 🩺 Troubleshooting
 
 | Message | What to do |
@@ -248,7 +250,7 @@ Pull requests are welcome. For larger changes, please open an issue first to dis
 
 ---
 
-<a name="türkçe"></a>
+<a name="turkce"></a>
 
 ## 🇹🇷 Türkçe
 

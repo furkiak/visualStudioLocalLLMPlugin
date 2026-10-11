@@ -8,6 +8,11 @@ on:
   pull_request:
     branches: [ master ]
   workflow_dispatch:
+    inputs:
+      release:
+        description: Create the release for the version in the VSIX manifest (master only)
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -51,14 +56,30 @@ jobs:
             '--- pkgdef ---'; $reader.ReadToEnd(); $reader.Dispose()
           } finally { $zip.Dispose() }
 
-      - name: Check the VSIX version against the tag
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Determine the release
+        id: release
         shell: pwsh
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          RELEASE_REQUESTED: ${{ inputs.release }}
         run: |
           [xml]$manifest = Get-Content LLLMPluginModern\source.extension.vsixmanifest
           $version = $manifest.PackageManifest.Metadata.Identity.Version
-          $tag = '${{ github.ref_name }}'.TrimStart('v')
-          if ($version -ne $tag) { throw "Tag v$tag does not match the manifest version $version." }
+          $tag = ''
+          if ($env:REF_TYPE -eq 'tag') {
+            # A pushed v* tag must match the manifest version.
+            if ($env:REF_NAME -ne "v$version") { throw "Tag $env:REF_NAME does not match the manifest version $version." }
+            $tag = $env:REF_NAME
+          } elseif ($env:EVENT_NAME -eq 'workflow_dispatch' -and $env:RELEASE_REQUESTED -eq 'true') {
+            # A manual run tags the built commit with the manifest version.
+            if ($env:REF -ne 'refs/heads/master') { throw 'Releases are created from master only.' }
+            $tag = "v$version"
+          }
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+          if ($tag) { "Release: $tag" } else { 'No release for this run.' }
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v6
@@ -68,23 +89,29 @@ jobs:
           if-no-files-found: error
 
       - name: Create GitHub release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.release.outputs.tag != ''
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
         run: |
-          $tag = '${{ github.ref_name }}'
-          $asset = "LocalLLMPlugin-$tag.vsix"
+          $asset = "LocalLLMPlugin-$env:TAG.vsix"
           Copy-Item $env:VSIX_PATH $asset
-          $notes = "docs/release-notes/$tag.md"
-          if (Test-Path $notes) {
-            gh release create $tag $asset --title "Local LLM Plugin $tag" --notes-file $notes --verify-tag
+          gh release view $env:TAG *> $null
+          if ($LASTEXITCODE -eq 0) {
+            # The release already exists (for example, created on github.com): refresh its VSIX.
+            gh release upload $env:TAG $asset --clobber
           } else {
-            gh release create $tag $asset --title "Local LLM Plugin $tag" --generate-notes --verify-tag
+            $notes = "docs/release-notes/$env:TAG.md"
+            $notesArgs = @('--generate-notes')
+            if (Test-Path $notes) { $notesArgs = @('--notes-file', $notes) }
+            # --target creates the tag on the built commit when it does not exist yet.
+            gh release create $env:TAG $asset --target $env:GITHUB_SHA --title "Local LLM Plugin $env:TAG" @notesArgs
           }
+          if ($LASTEXITCODE -ne 0) { throw "gh failed with exit code $LASTEXITCODE." }
 
       - name: Publish to the Visual Studio Marketplace
-        if: startsWith(github.ref, 'refs/tags/v') && env.VS_MARKETPLACE_TOKEN != ''
+        if: steps.release.outputs.tag != '' && env.VS_MARKETPLACE_TOKEN != ''
         shell: pwsh
         run: |
           $publisher = Get-ChildItem "$env:USERPROFILE\.nuget\packages\microsoft.vssdk.buildtools" -Recurse -Filter VsixPublisher.exe |
