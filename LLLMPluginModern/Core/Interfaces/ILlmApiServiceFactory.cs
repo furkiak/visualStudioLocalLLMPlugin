@@ -2,6 +2,6 @@
 {
     public interface ILlmApiServiceFactory
     {
-        ILlmApiService Create(string providerName);
+        ILlmApiService Create(string providerId);
     }
 }

@@ -3,46 +3,51 @@
 
 	<Extern href="stdidcmd.h"/>
 	<Extern href="vsshlids.h"/>
+	<Include href="KnownImageIds.vsct"/>
 
 	<Commands package="guidLLLMPluginModernPackage">
 		<Groups>
+			<!-- Tools menu -->
 			<Group guid="guidLLLMPluginModernPackageCmdSet" id="MyMenuGroup" priority="0x0600">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+			</Group>
+			<!-- Code editor right-click menu -->
+			<Group guid="guidLLLMPluginModernPackageCmdSet" id="EditorContextMenuGroup" priority="0x0100">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 			</Group>
 		</Groups>
 
 		<Buttons>
 			<Button guid="guidLLLMPluginModernPackageCmdSet" id="Command1Id" priority="0x0100" type="Button">
 				<Parent guid="guidLLLMPluginModernPackageCmdSet" id="MyMenuGroup" />
-				<Icon guid="guidImages" id="bmpPic1" />
+				<Icon guid="ImageCatalogGuid" id="MagicWand" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
 				<Strings>
-					<ButtonText>Local LLM Plugin (Modern)</ButtonText>
+					<ButtonText>AI Assistant (Local LLM)</ButtonText>
+					<CanonicalName>.Tools.AIAssistantLocalLLM</CanonicalName>
+					<LocCanonicalName>.Tools.AIAssistantLocalLLM</LocCanonicalName>
 				</Strings>
 			</Button>
 		</Buttons>
-
-		<Bitmaps>
-			<Bitmap guid="guidImages" href="Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
-		</Bitmaps>
 	</Commands>
+
+	<CommandPlacements>
+		<CommandPlacement guid="guidLLLMPluginModernPackageCmdSet" id="Command1Id" priority="0x0100">
+			<Parent guid="guidLLLMPluginModernPackageCmdSet" id="EditorContextMenuGroup"/>
+		</CommandPlacement>
+	</CommandPlacements>
+
 	<KeyBindings>
 		<KeyBinding guid="guidLLLMPluginModernPackageCmdSet" id="Command1Id" editor="guidVSStd97" key1="1" mod1="Control" />
 	</KeyBindings>
+
 	<Symbols>
 		<GuidSymbol name="guidLLLMPluginModernPackage" value="{769e069e-24ac-44f5-ab7c-6983dcc1e77a}" />
 
 		<GuidSymbol name="guidLLLMPluginModernPackageCmdSet" value="{B51F9B79-13A2-4FA8-88D1-9BCCF6DE418D}">
 			<IDSymbol name="MyMenuGroup" value="0x1020" />
+			<IDSymbol name="EditorContextMenuGroup" value="0x1030" />
 			<IDSymbol name="Command1Id" value="0x0100" />
-		</GuidSymbol>
-
-		<GuidSymbol name="guidImages" value="{27d34a9c-1695-41a1-8c10-3b9dcf3ea47d}" >
-			<IDSymbol name="bmpPic1" value="1" />
-			<IDSymbol name="bmpPic2" value="2" />
-			<IDSymbol name="bmpPicSearch" value="3" />
-			<IDSymbol name="bmpPicX" value="4" />
-			<IDSymbol name="bmpPicArrows" value="5" />
-			<IDSymbol name="bmpPicStrikethrough" value="6" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>

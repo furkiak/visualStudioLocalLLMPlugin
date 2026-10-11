@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VisualStudioLocalLLMPlugin-WithOllama-ExtraTool" Version="3.0.0" Language="en-US" Publisher="Visual Studio Local LLM Plugin - With Ollama - Extra Tool" />
-        <DisplayName>VisualStudioLocalLLMPlugin-WithOllama-ExtraTool</DisplayName>
-        <Description xml:space="preserve">Visual Studio Local LLM Plugin- With Ollama-Gemini-ChatGpt-Claude-ExtraTool</Description>
+        <Identity Id="VisualStudioLocalLLMPlugin-WithOllama-ExtraTool" Version="4.0.0" Language="en-US" Publisher="Furkan Akça" />
+        <DisplayName>Local LLM Plugin – AI Assistant</DisplayName>
+        <Description xml:space="preserve">AI coding assistant for Visual Studio with a Liquid Glass interface. Runs local models through Ollama or LM Studio (any OpenAI-compatible server) and cloud models from OpenAI, Anthropic and Google Gemini. Streaming answers, quick actions (explain, refactor, fix, optimize, document, tests, review), one-step undoable apply, and handy text tools.</Description>
+        <MoreInfo>https://github.com/furkiak/visualStudioLocalLLMPlugin</MoreInfo>
+        <License>LICENSE.txt</License>
+        <Icon>Resources\Icon.png</Icon>
+        <PreviewImage>Resources\Preview.png</PreviewImage>
+        <Tags>AI, LLM, Ollama, LM Studio, OpenAI, ChatGPT, Anthropic, Gemini, Assistant, Refactoring, Code Review</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
             <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
+            <ProductArchitecture>arm64</ProductArchitecture>
         </InstallationTarget>
     </Installation>
     <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7.2,)" />
     </Dependencies>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,19.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />

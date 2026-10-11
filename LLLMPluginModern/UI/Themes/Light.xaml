@@ -1,0 +1,121 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Liquid Glass · light palette (Apple system colors, light appearance) -->
+
+    <Color x:Key="Color.Accent">#FF007AFF</Color>
+    <Color x:Key="Color.Shadow">#40000000</Color>
+
+    <!-- Window -->
+    <LinearGradientBrush x:Key="Brush.WindowBackground" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FFF9F9FB" Offset="0"/>
+        <GradientStop Color="#FFF1F1F5" Offset="0.55"/>
+        <GradientStop Color="#FFEAEAF0" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Brush.WindowTint" Color="#C7F6F6F9"/>
+    <RadialGradientBrush x:Key="Brush.AuroraPrimary" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#2E007AFF" Offset="0"/>
+        <GradientStop Color="#00007AFF" Offset="1"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="Brush.AuroraSecondary" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#24AF52DE" Offset="0"/>
+        <GradientStop Color="#00AF52DE" Offset="1"/>
+    </RadialGradientBrush>
+    <LinearGradientBrush x:Key="Brush.WindowRim" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFFFFFFF" Offset="0"/>
+        <GradientStop Color="#14000000" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Glass surfaces -->
+    <SolidColorBrush x:Key="Brush.Surface" Color="#B3FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.SurfaceHover" Color="#F2FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.SurfacePressed" Color="#99F2F2F7"/>
+    <LinearGradientBrush x:Key="Brush.SurfaceRim" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFFFFFFF" Offset="0"/>
+        <GradientStop Color="#1F000000" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Brush.Sheen" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#80FFFFFF" Offset="0"/>
+        <GradientStop Color="#00FFFFFF" Offset="0.5"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Brush.Field" Color="#D9FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.FieldFocused" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Brush.Separator" Color="#17000000"/>
+    <SolidColorBrush x:Key="Brush.Popup" Color="#F7FBFBFD"/>
+    <SolidColorBrush x:Key="Brush.PopupHighlight" Color="#FF007AFF"/>
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="Brush.TextPrimary" Color="#FF1D1D1F"/>
+    <SolidColorBrush x:Key="Brush.TextSecondary" Color="#FF6E6E73"/>
+    <SolidColorBrush x:Key="Brush.TextTertiary" Color="#FFA1A1A6"/>
+    <SolidColorBrush x:Key="Brush.TextOnAccent" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Brush.Selection" Color="#FF007AFF"/>
+
+    <!-- Accent -->
+    <SolidColorBrush x:Key="Brush.Accent" Color="#FF007AFF"/>
+    <SolidColorBrush x:Key="Brush.AccentText" Color="#FF0066D6"/>
+    <LinearGradientBrush x:Key="Brush.AccentFill" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF2B8CFF" Offset="0"/>
+        <GradientStop Color="#FF0A7AFF" Offset="0.5"/>
+        <GradientStop Color="#FF006AE6" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Brush.AccentFillHover" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF4A9CFF" Offset="0"/>
+        <GradientStop Color="#FF1F87FF" Offset="0.5"/>
+        <GradientStop Color="#FF0A76F0" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Brush.AccentPressed" Color="#FF005FCC"/>
+    <SolidColorBrush x:Key="Brush.AccentSoft" Color="#1F007AFF"/>
+    <SolidColorBrush x:Key="Brush.AccentSoftHover" Color="#33007AFF"/>
+    <SolidColorBrush x:Key="Brush.AccentRim" Color="#59007AFF"/>
+    <SolidColorBrush x:Key="Brush.FocusRing" Color="#80007AFF"/>
+
+    <!-- Apple Intelligence style glow -->
+    <LinearGradientBrush x:Key="Brush.Intelligence" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FFFF9500" Offset="0"/>
+        <GradientStop Color="#FFFF2D55" Offset="0.3"/>
+        <GradientStop Color="#FFAF52DE" Offset="0.62"/>
+        <GradientStop Color="#FF007AFF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Brush.AvatarFill" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FF5856D6" Offset="0"/>
+        <GradientStop Color="#FFAF52DE" Offset="0.55"/>
+        <GradientStop Color="#FFFF2D55" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Status -->
+    <SolidColorBrush x:Key="Brush.Success" Color="#FF34C759"/>
+    <SolidColorBrush x:Key="Brush.Warning" Color="#FFFF9500"/>
+    <SolidColorBrush x:Key="Brush.WarningSoft" Color="#1FFF9500"/>
+    <SolidColorBrush x:Key="Brush.Danger" Color="#FFFF3B30"/>
+    <SolidColorBrush x:Key="Brush.DangerText" Color="#FFD70015"/>
+    <SolidColorBrush x:Key="Brush.DangerSoft" Color="#1AFF3B30"/>
+    <SolidColorBrush x:Key="Brush.DangerRim" Color="#4DFF3B30"/>
+
+    <!-- Conversation -->
+    <LinearGradientBrush x:Key="Brush.UserBubble" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#2B007AFF" Offset="0"/>
+        <GradientStop Color="#1F007AFF" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Brush.UserBubbleRim" Color="#40007AFF"/>
+    <SolidColorBrush x:Key="Brush.CodeBackground" Color="#E6FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.CodeHeader" Color="#08000000"/>
+    <SolidColorBrush x:Key="Brush.CodeText" Color="#FF1D1D1F"/>
+    <SolidColorBrush x:Key="Brush.InlineCode" Color="#14000000"/>
+    <SolidColorBrush x:Key="Brush.InlineCodeText" Color="#FFC2410C"/>
+
+    <!-- Scrollbars -->
+    <SolidColorBrush x:Key="Brush.ScrollThumb" Color="#33000000"/>
+    <SolidColorBrush x:Key="Brush.ScrollThumbHover" Color="#59000000"/>
+
+    <!-- Window controls -->
+    <SolidColorBrush x:Key="Brush.TrafficClose" Color="#FFFF5F57"/>
+    <SolidColorBrush x:Key="Brush.TrafficMinimize" Color="#FFFEBC2E"/>
+    <SolidColorBrush x:Key="Brush.TrafficZoom" Color="#FF28C840"/>
+    <SolidColorBrush x:Key="Brush.TrafficInactive" Color="#FFD1D1D6"/>
+    <SolidColorBrush x:Key="Brush.TrafficGlyph" Color="#99000000"/>
+
+    <!-- Switch -->
+    <SolidColorBrush x:Key="Brush.SwitchOff" Color="#29000000"/>
+    <SolidColorBrush x:Key="Brush.SwitchKnob" Color="#FFFFFFFF"/>
+</ResourceDictionary>
