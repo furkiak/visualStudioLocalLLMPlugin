@@ -1,40 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using LLLMPluginModern.Core.Interfaces;
+using LLLMPluginModern.Core.Models;
 using LLLMPluginModern.Infrastructure.Services;
 
 namespace LLLMPluginModern.Infrastructure.Factories
 {
-    public class LlmApiServiceFactory : ILlmApiServiceFactory
+    public sealed class LlmApiServiceFactory : ILlmApiServiceFactory
     {
-        private readonly OllamaApiService _ollamaService;
-        private readonly GeminiApiService _geminiService;
-        private readonly OpenAiApiService _openAiService;
-        private readonly AnthropicApiService _anthropicService;
+        private readonly Dictionary<string, ILlmApiService> _services;
 
-        public LlmApiServiceFactory(
-            OllamaApiService ollamaService,
-            GeminiApiService geminiService,
-            OpenAiApiService openAiService,
-            AnthropicApiService anthropicService)
+        public LlmApiServiceFactory()
+            : this(new Dictionary<string, ILlmApiService>(StringComparer.OrdinalIgnoreCase)
+            {
+                [ProviderIds.Ollama] = new OllamaApiService(),
+                [ProviderIds.OpenAI] = new OpenAiApiService(),
+                [ProviderIds.OpenAICompatible] = new OpenAiApiService(compatibleMode: true),
+                [ProviderIds.Anthropic] = new AnthropicApiService(),
+                [ProviderIds.Gemini] = new GeminiApiService(),
+            })
         {
-            _ollamaService = ollamaService;
-            _geminiService = geminiService;
-            _openAiService = openAiService;
-            _anthropicService = anthropicService;
         }
 
-        public ILlmApiService Create(string providerName)
+        public LlmApiServiceFactory(Dictionary<string, ILlmApiService> services)
         {
-            if (string.Equals(providerName, "Gemini", StringComparison.OrdinalIgnoreCase))
-                return _geminiService;
+            _services = services ?? throw new ArgumentNullException(nameof(services));
+        }
 
-            if (string.Equals(providerName, "OpenAI", StringComparison.OrdinalIgnoreCase))
-                return _openAiService;
-
-            if (string.Equals(providerName, "Anthropic", StringComparison.OrdinalIgnoreCase))
-                return _anthropicService;
-
-            return _ollamaService; 
+        public ILlmApiService Create(string providerId)
+        {
+            if (providerId != null && _services.TryGetValue(providerId, out var service))
+                return service;
+            return _services[ProviderIds.Ollama];
         }
     }
 }

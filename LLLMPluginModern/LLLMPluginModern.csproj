@@ -16,16 +16,16 @@
 		<RootNamespace>LLLMPluginModern</RootNamespace>
 		<AssemblyName>LLLMPluginModern</AssemblyName>
 		<TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+		<LangVersion>10.0</LangVersion>
 		<GeneratePkgDefFile>true</GeneratePkgDefFile>
 		<UseCodebase>true</UseCodebase>
 
 		<IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
 		<IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
-
 		<CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
 		<CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+
 		<StartAction>Program</StartAction>
 		<StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
 		<StartArguments>/rootsuffix Exp</StartArguments>
@@ -52,30 +52,51 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="Command1.cs" />
-		<Compile Include="Core\Bootstrapper.cs" />
+		<Compile Include="AppServices.cs" />
+		<Compile Include="LLLMPluginModernPackage.cs" />
+		<Compile Include="Properties\AssemblyInfo.cs" />
 		<Compile Include="Core\Interfaces\IDialogService.cs" />
 		<Compile Include="Core\Interfaces\ILlmApiService.cs" />
 		<Compile Include="Core\Interfaces\ILlmApiServiceFactory.cs" />
 		<Compile Include="Core\Interfaces\ISettingsService.cs" />
+		<Compile Include="Core\Models\AppSettings.cs" />
+		<Compile Include="Core\Models\EditorContext.cs" />
+		<Compile Include="Core\Models\LlmRequest.cs" />
 		<Compile Include="Core\Models\LlmResponse.cs" />
-		<Compile Include="Core\Models\LlmSettings.cs" />
+		<Compile Include="Core\Models\ProviderInfo.cs" />
+		<Compile Include="Core\Prompts\PromptBuilder.cs" />
+		<Compile Include="Core\Text\LanguageMap.cs" />
+		<Compile Include="Core\Text\Markdown.cs" />
+		<Compile Include="Core\Text\TextTools.cs" />
+		<Compile Include="Core\Text\ThinkTagFilter.cs" />
 		<Compile Include="Infrastructure\Factories\LlmApiServiceFactory.cs" />
+		<Compile Include="Infrastructure\Http\Endpoints.cs" />
+		<Compile Include="Infrastructure\Http\SharedHttp.cs" />
 		<Compile Include="Infrastructure\Services\AnthropicApiService.cs" />
-		<Compile Include="Infrastructure\Services\DialogService.cs" />
 		<Compile Include="Infrastructure\Services\GeminiApiService.cs" />
+		<Compile Include="Infrastructure\Services\LlmApiServiceBase.cs" />
 		<Compile Include="Infrastructure\Services\OllamaApiService.cs" />
 		<Compile Include="Infrastructure\Services\OpenAiApiService.cs" />
 		<Compile Include="Infrastructure\Services\SettingsService.cs" />
-		<Compile Include="Properties\AssemblyInfo.cs" />
-		<Compile Include="LLLMPluginModernPackage.cs" />
+		<Compile Include="UI\Behaviors\Behaviors.cs" />
+		<Compile Include="UI\Behaviors\MarkdownView.cs" />
+		<Compile Include="UI\Controls\GlassWindow.cs" />
+		<Compile Include="UI\Controls\Icon.cs" />
+		<Compile Include="UI\Controls\NativeMethods.cs" />
+		<Compile Include="UI\Controls\TrafficLights.cs" />
+		<Compile Include="UI\Converters\Converters.cs" />
+		<Compile Include="UI\Services\DialogService.cs" />
+		<Compile Include="UI\Theming\ThemeManager.cs" />
 		<Compile Include="UI\ViewModels\AddViewModel.cs" />
+		<Compile Include="UI\ViewModels\ChatItemViewModel.cs" />
 		<Compile Include="UI\ViewModels\InputDialogViewModel.cs" />
 		<Compile Include="UI\ViewModels\MainViewModel.cs" />
+		<Compile Include="UI\ViewModels\MessageViewModel.cs" />
 		<Compile Include="UI\ViewModels\ModifyReplicateViewModel.cs" />
 		<Compile Include="UI\ViewModels\RelayCommand.cs" />
 		<Compile Include="UI\ViewModels\SettingsViewModel.cs" />
 		<Compile Include="UI\ViewModels\ViewModelBase.cs" />
+		<Compile Include="UI\Views\DialogHelpers.cs" />
 		<Compile Include="UI\Views\AddView.xaml.cs">
 			<DependentUpon>AddView.xaml</DependentUpon>
 		</Compile>
@@ -85,50 +106,37 @@
 		<Compile Include="UI\Views\MainView.xaml.cs">
 			<DependentUpon>MainView.xaml</DependentUpon>
 		</Compile>
+		<Compile Include="UI\Views\MessageView.xaml.cs">
+			<DependentUpon>MessageView.xaml</DependentUpon>
+		</Compile>
 		<Compile Include="UI\Views\ModifyReplicateView.xaml.cs">
 			<DependentUpon>ModifyReplicateView.xaml</DependentUpon>
 		</Compile>
 		<Compile Include="UI\Views\SettingsView.xaml.cs">
 			<DependentUpon>SettingsView.xaml</DependentUpon>
 		</Compile>
+		<Compile Include="VisualStudio\OpenAssistantCommand.cs" />
+		<Compile Include="VisualStudio\VsEditorService.cs" />
+		<Compile Include="VisualStudio\VsHost.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="source.extension.vsixmanifest">
+		<Page Include="UI\Themes\Controls.xaml">
 			<SubType>Designer</SubType>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="PresentationCore" />
-		<Reference Include="PresentationFramework" />
-		<Reference Include="System" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Design" />
-		<Reference Include="System.Drawing" />
-		<Reference Include="System.Windows.Forms" />
-		<Reference Include="System.Xaml" />
-		<Reference Include="System.Xml" />
-		<Reference Include="WindowsBase" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-		<PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime" />
-		<PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.10.2179" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Commands\" />
-	</ItemGroup>
-
-	<ItemGroup>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="UI\Themes\Dark.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="UI\Themes\Icons.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="UI\Themes\Light.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
 		<Page Include="UI\Views\AddView.xaml">
 			<SubType>Designer</SubType>
 			<Generator>MSBuild:Compile</Generator>
@@ -138,6 +146,10 @@
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Include="UI\Views\MainView.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="UI\Views\MessageView.xaml">
 			<SubType>Designer</SubType>
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
@@ -152,13 +164,50 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="source.extension.vsixmanifest">
+			<SubType>Designer</SubType>
+		</None>
 		<VSCTCompile Include="LLLMPluginModernPackage.vsct">
 			<ResourceName>Menus.ctmenu</ResourceName>
 		</VSCTCompile>
+		<Content Include="Resources\Icon.png">
+			<IncludeInVSIX>true</IncludeInVSIX>
+		</Content>
+		<Content Include="Resources\Preview.png">
+			<IncludeInVSIX>true</IncludeInVSIX>
+		</Content>
+		<Content Include="..\LICENSE.txt">
+			<Link>LICENSE.txt</Link>
+			<IncludeInVSIX>true</IncludeInVSIX>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Resources\Command1.png" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Design" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Security" />
+		<Reference Include="System.Xaml" />
+		<Reference Include="System.Xml" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+
+	<!--
+		No third-party assemblies ship in the VSIX: Newtonsoft.Json and the SDK assemblies are provided by
+		Visual Studio itself (the VSSDK excludes them), which avoids assembly binding conflicts inside devenv.exe.
+	-->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.14.2142">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,28 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+## Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]64/
+*.vsix
+*.binlog
+*.log
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+
+## Tests and tools
+TestResults/
+.idea/

@@ -1,14 +1,16 @@
-﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using LLLMPluginModern.UI.Theming;
+using LLLMPluginModern.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
 namespace LLLMPluginModern
 {
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(LLLMPluginModernPackage.PackageGuidString)]
+    [Guid(PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideBindingPath]
     public sealed class LLLMPluginModernPackage : AsyncPackage
@@ -17,19 +19,24 @@ namespace LLLMPluginModern
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
             try
             {
-                Core.Bootstrapper.Initialize();
-
-                await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-                await Command1.InitializeAsync(this);
+                var editor = await VsEditorService.CreateAsync(this);
+                var services = AppServices.CreateDefault(editor);
+                ThemeManager.Configure(() => services.Settings.Load(), VsHost.IsDarkTheme);
+                await OpenAssistantCommand.InitializeAsync(this, services);
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("A critical error occurred while loading the plugin:\n\n" + ex.Message,
-                    "AI Assistant Error",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Error);
+                ActivityLog.LogError("LLLMPluginModern", ex.ToString());
+                VsShellUtilities.ShowMessageBox(this,
+                    "The AI Assistant extension could not be loaded:\n\n" + ex.Message,
+                    "AI Assistant",
+                    OLEMSGICON.OLEMSGICON_CRITICAL,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
             }
         }
     }

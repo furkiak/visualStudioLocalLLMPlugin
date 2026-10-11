@@ -1,0 +1,98 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ master, 'release/**' ]
+    tags: [ 'v*' ]
+    paths-ignore: [ 'README.md', 'CHANGELOG.md', 'docs/**', 'marketplace/**' ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      VSIX_PATH: LLLMPluginModern\bin\Release\LLLMPluginModern.vsix
+      VS_MARKETPLACE_TOKEN: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Build VSIX
+        run: msbuild LLLMPluginModern.sln -restore -p:Configuration=Release -p:DeployExtension=false -v:minimal -nologo
+
+      - name: Inspect VSIX contents
+        shell: pwsh
+        run: |
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [IO.Compression.ZipFile]::OpenRead((Resolve-Path $env:VSIX_PATH))
+          try {
+            $zip.Entries | ForEach-Object { '{0,10}  {1}' -f $_.Length, $_.FullName }
+            $names = $zip.Entries.FullName
+            # Newtonsoft.Json is intentionally absent: Visual Studio ships it and the VSSDK excludes it.
+            foreach ($required in 'extension.vsixmanifest', 'LLLMPluginModern.dll', 'LLLMPluginModern.pkgdef',
+                                  'Resources/Icon.png', 'Resources/Preview.png', 'LICENSE.txt') {
+              if ($names -notcontains $required) { throw "The VSIX is missing $required." }
+            }
+            $pkgdef = $zip.GetEntry('LLLMPluginModern.pkgdef').Open()
+            $reader = New-Object IO.StreamReader($pkgdef)
+            '--- pkgdef ---'; $reader.ReadToEnd(); $reader.Dispose()
+          } finally { $zip.Dispose() }
+
+      - name: Check the VSIX version against the tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        run: |
+          [xml]$manifest = Get-Content LLLMPluginModern\source.extension.vsixmanifest
+          $version = $manifest.PackageManifest.Metadata.Identity.Version
+          $tag = '${{ github.ref_name }}'.TrimStart('v')
+          if ($version -ne $tag) { throw "Tag v$tag does not match the manifest version $version." }
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: LocalLLMPlugin-vsix
+          path: ${{ env.VSIX_PATH }}
+          if-no-files-found: error
+
+      - name: Create GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ github.ref_name }}'
+          $asset = "LocalLLMPlugin-$tag.vsix"
+          Copy-Item $env:VSIX_PATH $asset
+          $notes = "docs/release-notes/$tag.md"
+          if (Test-Path $notes) {
+            gh release create $tag $asset --title "Local LLM Plugin $tag" --notes-file $notes --verify-tag
+          } else {
+            gh release create $tag $asset --title "Local LLM Plugin $tag" --generate-notes --verify-tag
+          }
+
+      - name: Publish to the Visual Studio Marketplace
+        if: startsWith(github.ref, 'refs/tags/v') && env.VS_MARKETPLACE_TOKEN != ''
+        shell: pwsh
+        run: |
+          $publisher = Get-ChildItem "$env:USERPROFILE\.nuget\packages\microsoft.vssdk.buildtools" -Recurse -Filter VsixPublisher.exe |
+            Where-Object { $_.Directory.Name -eq 'bin' } | Select-Object -First 1
+          if (-not $publisher) { throw 'VsixPublisher.exe was not found in the Microsoft.VSSDK.BuildTools package.' }
+          & $publisher.FullName publish `
+            -payload $env:VSIX_PATH `
+            -publishManifest marketplace\publishManifest.json `
+            -personalAccessToken $env:VS_MARKETPLACE_TOKEN `
+            -ignoreWarnings "VSIXValidatorWarning01,VSIXValidatorWarning02,VSIXValidatorWarning08"
+          if ($LASTEXITCODE -ne 0) { throw "VsixPublisher failed with exit code $LASTEXITCODE." }
