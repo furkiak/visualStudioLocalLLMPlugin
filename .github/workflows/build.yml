@@ -33,6 +33,23 @@ jobs:
       - name: Build VSIX
         run: msbuild LLLMPluginModern.sln -restore -p:Configuration=Release -p:DeployExtension=false -v:minimal -nologo
 
+      - name: Inspect VSIX contents
+        shell: pwsh
+        run: |
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [IO.Compression.ZipFile]::OpenRead((Resolve-Path $env:VSIX_PATH))
+          try {
+            $zip.Entries | ForEach-Object { '{0,10}  {1}' -f $_.Length, $_.FullName }
+            $names = $zip.Entries.FullName
+            foreach ($required in 'extension.vsixmanifest', 'LLLMPluginModern.dll', 'LLLMPluginModern.pkgdef',
+                                  'Newtonsoft.Json.dll', 'Resources/Icon.png', 'Resources/Preview.png', 'LICENSE.txt') {
+              if ($names -notcontains $required) { throw "The VSIX is missing $required." }
+            }
+            $pkgdef = $zip.GetEntry('LLLMPluginModern.pkgdef').Open()
+            $reader = New-Object IO.StreamReader($pkgdef)
+            '--- pkgdef ---'; $reader.ReadToEnd(); $reader.Dispose()
+          } finally { $zip.Dispose() }
+
       - name: Check the VSIX version against the tag
         if: startsWith(github.ref, 'refs/tags/v')
         shell: pwsh
