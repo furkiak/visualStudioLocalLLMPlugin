@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VisualStudioLocalLLMPlugin-WithOllama-ExtraTool" Version="4.0.0" Language="en-US" Publisher="Furkan Akça" />
+        <Identity Id="VisualStudioLocalLLMPlugin-WithOllama-ExtraTool" Version="4.0.0" Language="en-US" Publisher="Visual Studio Local LLM Plugin - With Ollama - Extra Tool" />
         <DisplayName>Local LLM Plugin – AI Assistant</DisplayName>
         <Description xml:space="preserve">AI coding assistant for Visual Studio with a Liquid Glass interface. Runs local models through Ollama or LM Studio (any OpenAI-compatible server) and cloud models from OpenAI, Anthropic and Google Gemini. Streaming answers, quick actions (explain, refactor, fix, optimize, document, tests, review), one-step undoable apply, and handy text tools.</Description>
         <MoreInfo>https://github.com/furkiak/visualStudioLocalLLMPlugin</MoreInfo>

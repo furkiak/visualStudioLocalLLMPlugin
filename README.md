@@ -14,6 +14,10 @@ one-click quick actions and a single-step undoable apply, all in a macOS-inspire
 ![WPF](https://img.shields.io/badge/WPF-Liquid_Glass-BF5AF2?style=for-the-badge)
 ![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-FF9F0A?style=for-the-badge)
 
+[![Visual Studio Marketplace](https://img.shields.io/badge/Visual_Studio_Marketplace-Install-0A84FF?style=for-the-badge&logo=visualstudio&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=VisualStudioLocalLLMPlugin-WithOllama-ExtraTool.VisualStudioLocalLLMPlugin-WithOllama-ExtraTool)
+[![Latest release](https://img.shields.io/github/v/release/furkiak/visualStudioLocalLLMPlugin?style=for-the-badge&label=Release&color=30D158)](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases/latest)
+[![Build](https://img.shields.io/github/actions/workflow/status/furkiak/visualStudioLocalLLMPlugin/build.yml?style=for-the-badge&label=Build)](https://github.com/furkiak/visualStudioLocalLLMPlugin/actions/workflows/build.yml)
+
 ![Ollama](https://img.shields.io/badge/Ollama-000000?style=flat-square&logo=ollama&logoColor=white)
 ![LM Studio](https://img.shields.io/badge/LM_Studio-OpenAI_compatible-4B5563?style=flat-square)
 ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
@@ -123,10 +127,13 @@ Default endpoints and models are pre-filled — press **↻** next to *Model* to
 
 ## 📦 Installation
 
-1. Download the latest `.vsix` from the [Releases](../../releases) page.
-2. Double-click it and choose your Visual Studio instances (Visual Studio 2022 17.0 or later, including **Visual Studio 2026**, on x64 or Arm64).
-3. Restart Visual Studio.
-4. Open the assistant with **Ctrl+1**, from **Tools ▸ AI Assistant (Local LLM)**, or by right-clicking in the code editor.
+**From the Visual Studio Marketplace (recommended)** — in Visual Studio open **Extensions ▸ Manage Extensions**, search for **Local LLM Plugin** and click *Install*, or get it from the [Marketplace page](https://marketplace.visualstudio.com/items?itemName=VisualStudioLocalLLMPlugin-WithOllama-ExtraTool.VisualStudioLocalLLMPlugin-WithOllama-ExtraTool). Updates are delivered automatically.
+
+**From GitHub Releases** — download `LocalLLMPlugin-v4.x.x.vsix` from the [latest release](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases/latest) and double-click it.
+
+Supported: Visual Studio 2022 17.0 or later and **Visual Studio 2026** (Community, Professional, Enterprise) on x64 or Arm64. Restart Visual Studio after installing, then open the assistant with **Ctrl+1**, from **Tools ▸ AI Assistant (Local LLM)**, or by right-clicking in the code editor.
+
+Upgrading from 3.x? Your settings and API key are migrated automatically. See the [changelog](CHANGELOG.md) for everything that changed.
 
 ### Quick start with a local model (Ollama)
 
@@ -210,7 +217,15 @@ Requirements: Visual Studio 2022 (17.x) or Visual Studio 2026 with the **Visual 
 2. Build — NuGet packages restore automatically.
 3. Press **F5** to start an experimental instance of Visual Studio with the extension loaded.
 
-The `.vsix` is written to `LLLMPluginModern/bin/<Configuration>/`.
+The `.vsix` is written to `LLLMPluginModern/bin/<Configuration>/`. From the command line: `msbuild LLLMPluginModern.sln -restore -p:Configuration=Release`.
+
+### Releasing
+
+Every push is built on Windows by [GitHub Actions](.github/workflows/build.yml) and the `.vsix` is attached to the run as an artifact.
+Pushing a tag such as `v4.0.0` (it must match the version in `source.extension.vsixmanifest`) also:
+
+1. creates a GitHub release with the `.vsix` and the notes from `docs/release-notes/<tag>.md`;
+2. publishes to the Visual Studio Marketplace using [`marketplace/publishManifest.json`](marketplace/publishManifest.json) and [`marketplace/overview.md`](marketplace/overview.md) — when the repository secret `VS_MARKETPLACE_TOKEN` (an Azure DevOps personal access token with the *Marketplace ▸ Manage* scope) is set.
 
 ## 🩺 Troubleshooting
 
@@ -289,10 +304,13 @@ Her sağlayıcının URL'si, modeli, API anahtarı, sıcaklığı ve token sın�
 
 ### 📦 Kurulum
 
-1. [Releases](../../releases) sayfasından en son `.vsix` dosyasını indirin.
-2. Çift tıklayın ve Visual Studio sürümlerinizi seçin (Visual Studio 2022 17.0 ve üzeri, **Visual Studio 2026** dahil; x64 veya Arm64).
-3. Visual Studio'yu yeniden başlatın.
-4. Asistanı **Ctrl+1** ile, **Tools ▸ AI Assistant (Local LLM)** menüsünden ya da kod editöründe sağ tıklayarak açın.
+**Visual Studio Marketplace'ten (önerilir)** — Visual Studio'da **Extensions ▸ Manage Extensions** menüsünü açın, **Local LLM Plugin** aratıp *Install*'a tıklayın ya da [Marketplace sayfasından](https://marketplace.visualstudio.com/items?itemName=VisualStudioLocalLLMPlugin-WithOllama-ExtraTool.VisualStudioLocalLLMPlugin-WithOllama-ExtraTool) indirin. Güncellemeler otomatik gelir.
+
+**GitHub Releases'tan** — [son sürümdeki](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases/latest) `LocalLLMPlugin-v4.x.x.vsix` dosyasını indirip çift tıklayın.
+
+Desteklenenler: Visual Studio 2022 17.0 ve üzeri ile **Visual Studio 2026** (Community, Professional, Enterprise), x64 veya Arm64. Kurulumdan sonra Visual Studio'yu yeniden başlatın; asistanı **Ctrl+1** ile, **Tools ▸ AI Assistant (Local LLM)** menüsünden ya da kod editöründe sağ tıklayarak açın.
+
+3.x'ten mi geçiyorsunuz? Ayarlarınız ve API anahtarınız otomatik taşınır. Tüm değişiklikler için [değişiklik günlüğüne](CHANGELOG.md) bakın.
 
 **Yerel modelle hızlı başlangıç (Ollama):**
 
