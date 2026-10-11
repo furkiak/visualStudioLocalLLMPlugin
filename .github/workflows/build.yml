@@ -41,8 +41,9 @@ jobs:
           try {
             $zip.Entries | ForEach-Object { '{0,10}  {1}' -f $_.Length, $_.FullName }
             $names = $zip.Entries.FullName
+            # Newtonsoft.Json is intentionally absent: Visual Studio ships it and the VSSDK excludes it.
             foreach ($required in 'extension.vsixmanifest', 'LLLMPluginModern.dll', 'LLLMPluginModern.pkgdef',
-                                  'Newtonsoft.Json.dll', 'Resources/Icon.png', 'Resources/Preview.png', 'LICENSE.txt') {
+                                  'Resources/Icon.png', 'Resources/Preview.png', 'LICENSE.txt') {
               if ($names -notcontains $required) { throw "The VSIX is missing $required." }
             }
             $pkgdef = $zip.GetEntry('LLLMPluginModern.pkgdef').Open()

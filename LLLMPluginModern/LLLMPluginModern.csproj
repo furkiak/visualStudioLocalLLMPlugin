@@ -198,8 +198,8 @@
 	</ItemGroup>
 
 	<!--
-		Only Newtonsoft.Json ships with the extension, and Visual Studio already loads the same major version.
-		Everything else comes from the IDE itself, which avoids assembly binding conflicts inside devenv.exe.
+		No third-party assemblies ship in the VSIX: Newtonsoft.Json and the SDK assemblies are provided by
+		Visual Studio itself (the VSSDK excludes them), which avoids assembly binding conflicts inside devenv.exe.
 	-->
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime" />

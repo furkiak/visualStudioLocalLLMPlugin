@@ -206,7 +206,7 @@ Design decisions:
 
 - **Streaming pipeline** — one base class handles sending, user cancellation, idle timeouts, HTTP/JSON error extraction and friendly connection messages; each provider only parses its own stream format. UI updates are batched (about 20 per second) so even very fast local models keep the window smooth.
 - **Modern editor API** — edits use `ITextBuffer` with an undo transaction instead of DTE `TextSelection`, so they are atomic, fast, and free of auto-format side effects.
-- **No dependency conflicts in `devenv.exe`** — the extension ships only `Newtonsoft.Json` (which Visual Studio already loads). The DI container and polyfill packages of 3.x were replaced by a small composition root.
+- **No dependency conflicts in `devenv.exe`** — the package contains only the extension itself; `Newtonsoft.Json` comes from Visual Studio. The DI container and polyfill packages of 3.x were replaced by a small composition root.
 - **Theme-aware resources** — every color is a `DynamicResource`, so switching Dark/Light re-skins open windows instantly.
 
 ## 🛠️ Building from source
@@ -355,7 +355,7 @@ Ayarlar `%AppData%\LLLMPluginModern\settings.json` dosyasındadır. API anahtarl
 - **Infrastructure** — paylaşılan HttpClient, akış tabanlı sağlayıcı istemcileri (Ollama / OpenAI / Anthropic / Gemini) ve DPAPI ile şifreli ayar servisi.
 - **UI** — MVVM; Liquid Glass tema sözlükleri, özel cam pencere (Windows 11 akrilik), vektör ikonlar, sohbet, ayarlar ve diyaloglar.
 - **VisualStudio** — komut, modern editör API'siyle (ITextBuffer + geri alma işlemi) düzenleme, diyalog sahipliği ve tema algılama.
-- `devenv.exe` içinde bağımlılık çakışması yok: eklenti yalnızca Visual Studio'nun zaten yüklediği `Newtonsoft.Json`'ı taşır.
+- `devenv.exe` içinde bağımlılık çakışması yok: paket yalnızca eklentinin kendisini içerir; `Newtonsoft.Json` Visual Studio'dan gelir.
 
 ### 🛠️ Kaynaktan derleme
 
