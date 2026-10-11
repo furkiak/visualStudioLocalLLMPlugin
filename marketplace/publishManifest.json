@@ -5,12 +5,6 @@
     "internalName": "VisualStudioLocalLLMPlugin-WithOllama-ExtraTool"
   },
   "overview": "overview.md",
-  "assetFiles": [
-    { "pathOnDisk": "../docs/images/assistant-dark.png", "targetPath": "images/assistant-dark.png" },
-    { "pathOnDisk": "../docs/images/streaming-dark.png", "targetPath": "images/streaming-dark.png" },
-    { "pathOnDisk": "../docs/images/tools-and-errors-dark.png", "targetPath": "images/tools-and-errors-dark.png" },
-    { "pathOnDisk": "../docs/images/settings-light.png", "targetPath": "images/settings-light.png" }
-  ],
   "priceCategory": "free",
   "publisher": "VisualStudioLocalLLMPlugin-WithOllama-ExtraTool",
   "private": false,

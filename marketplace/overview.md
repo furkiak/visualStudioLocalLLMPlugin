@@ -3,7 +3,7 @@
 **A fast, private, beautifully designed AI coding assistant that lives inside Visual Studio.**
 Run models locally with **Ollama** or **LM Studio**, or use **OpenAI**, **Anthropic** and **Google Gemini** — with streaming answers, one-click quick actions and a single-step undoable apply, all in a macOS-inspired *Liquid Glass* interface.
 
-![The AI Assistant window](images/assistant-dark.png)
+![The AI Assistant window](https://raw.githubusercontent.com/furkiak/visualStudioLocalLLMPlugin/master/docs/images/assistant-dark.png)
 
 > **Version 4.0** is a complete refresh: new interface, live streaming, conversations, quick actions, secure key storage, Visual Studio 2026 and Arm64 support — and many fixes. See the [release notes](https://github.com/furkiak/visualStudioLocalLLMPlugin/releases).
 
@@ -26,7 +26,7 @@ Run models locally with **Ollama** or **LM Studio**, or use **OpenAI**, **Anthro
 - **Thought process** — reasoning from thinking models (DeepSeek-R1, Qwen3, gpt-oss…) is shown separately instead of mixed into the answer.
 - **Regenerate** an answer, or **Use as input** to keep transforming a result.
 
-![Streaming with the intelligence glow](images/streaming-dark.png)
+![Streaming with the intelligence glow](https://raw.githubusercontent.com/furkiak/visualStudioLocalLLMPlugin/master/docs/images/streaming-dark.png)
 
 ### Apply exactly what you want
 
@@ -44,7 +44,7 @@ Every edit uses the Visual Studio editor API as **one undo transaction**, re-ind
 Remove duplicate lines · Modify & replicate · Erase text · Add to every line · Sort A→Z / Z→A · Reverse lines · Remove empty lines · Trim trailing whitespace · UPPERCASE · lowercase.
 Results keep your line endings and can be applied, copied or chained into the next tool.
 
-![Text tools and friendly errors](images/tools-and-errors-dark.png)
+![Text tools and friendly errors](https://raw.githubusercontent.com/furkiak/visualStudioLocalLLMPlugin/master/docs/images/tools-and-errors-dark.png)
 
 ## Supported providers
 
@@ -58,7 +58,7 @@ Results keep your line endings and can be applied, copied or chained into the ne
 
 Press **↻** in Settings to list the models installed in Ollama or available to your API key, and **Test connection** to check everything in one click.
 
-![Settings](images/settings-light.png)
+![Settings](https://raw.githubusercontent.com/furkiak/visualStudioLocalLLMPlugin/master/docs/images/settings-light.png)
 
 ## Getting started
 
