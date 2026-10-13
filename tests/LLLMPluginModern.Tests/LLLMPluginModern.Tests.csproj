@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    The extension is a classic VSIX project that needs the Visual Studio SDK to build. Its logic does not: the files
+    below are compiled straight into this test assembly (same framework, same language version), so the tests run
+    with a plain `dotnet test` and nothing from Visual Studio.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>LLLMPluginModern.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\LLLMPluginModern\Core\**\*.cs" Link="Linked\Core\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\LLLMPluginModern\Infrastructure\Http\Endpoints.cs" Link="Linked\Infrastructure\Endpoints.cs" />
+    <Compile Include="..\..\LLLMPluginModern\Infrastructure\Services\SettingsService.cs" Link="Linked\Infrastructure\SettingsService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Security" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

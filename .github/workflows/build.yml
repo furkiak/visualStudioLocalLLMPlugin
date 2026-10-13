@@ -38,6 +38,11 @@ jobs:
       - name: Build VSIX
         run: msbuild LLLMPluginModern.sln -restore -p:Configuration=Release -p:DeployExtension=false -v:minimal -nologo
 
+      # Markdown, think-tag filtering, text tools, prompts, endpoints and the settings migration. A failure here stops
+      # the run before anything is released or published.
+      - name: Unit tests
+        run: dotnet test tests\LLLMPluginModern.Tests -c Release --nologo
+
       - name: Inspect VSIX contents
         shell: pwsh
         run: |

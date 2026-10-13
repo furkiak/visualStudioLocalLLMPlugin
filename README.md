@@ -200,6 +200,7 @@ LLLMPluginModern/
 │   └── Views/         Assistant window, settings and dialogs
 ├── VisualStudio/      Command, editor integration (ITextBuffer edits, undo transaction), dialog owner, theme detection
 └── AppServices.cs     Composition root
+tests/LLLMPluginModern.Tests/   xUnit tests for Core, endpoint handling and the settings service
 ```
 
 Design decisions:
@@ -218,6 +219,8 @@ Requirements: Visual Studio 2022 (17.x) or Visual Studio 2026 with the **Visual 
 3. Press **F5** to start an experimental instance of Visual Studio with the extension loaded.
 
 The `.vsix` is written to `LLLMPluginModern/bin/<Configuration>/`. From the command line: `msbuild LLLMPluginModern.sln -restore -p:Configuration=Release`.
+
+**Tests** — `dotnet test tests/LLLMPluginModern.Tests` runs 81 tests for the Markdown reader, the `<think>` filter, the text tools, prompt building, endpoint normalization and the settings service (DPAPI round trip, 3.x migration, corrupt files). They compile the extension's source files directly, so they need neither the Visual Studio SDK nor a Visual Studio instance; CI runs them before anything is released.
 
 ### Releasing
 
@@ -363,6 +366,8 @@ Ayarlar `%AppData%\LLLMPluginModern\settings.json` dosyasındadır. API anahtarl
 
 Gereksinim: **Visual Studio extension development** iş yüküyle Visual Studio 2022 (17.x) veya Visual Studio 2026.
 `LLLMPluginModern.sln` dosyasını açın, derleyin ve eklentinin yüklü olduğu deneysel Visual Studio örneğini başlatmak için **F5**'e basın.
+
+**Testler** — `dotnet test tests/LLLMPluginModern.Tests` Markdown okuyucu, `<think>` filtresi, metin araçları, istem oluşturma, uç nokta düzeltme ve ayar servisi (DPAPI, 3.x aktarımı, bozuk dosya) için 81 testi çalıştırır. Testler eklentinin kaynak dosyalarını doğrudan derler; Visual Studio SDK'sı ya da Visual Studio gerekmez. CI, bir sürüm yayımlanmadan önce bunları çalıştırır.
 
 ### 🩺 Sorun giderme
 

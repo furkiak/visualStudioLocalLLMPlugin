@@ -2,6 +2,11 @@
 
 All notable changes to the Local LLM Plugin for Visual Studio.
 
+## [Unreleased]
+
+### Added
+- A test project (`tests/LLLMPluginModern.Tests`, 81 xUnit tests) for the Markdown reader, `<think>` filtering, text tools, prompt building, endpoint normalization and the settings service, including the 3.x migration. The build workflow runs it before a release or Marketplace publish. The extension itself is unchanged.
+
 ## [4.0.0] — 2026-10-11
 
 ### Added
